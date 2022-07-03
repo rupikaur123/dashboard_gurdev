@@ -3,6 +3,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -16,10 +18,12 @@ export class LatestNewsComponent implements OnInit {
   newsList: any = []
   searchUser: any
   closeResult: string = '';
+  image_upload:any
+  form_type:any=''
   title: any = ''
   content: any = ''
   image: any = ''
-  
+  baseUrl: any = 'http://api.gurdevhospital.co/'
   url: any; //Angular 11, for stricter type
   msg = "";
   date: NgbDateStruct;
@@ -30,14 +34,17 @@ export class LatestNewsComponent implements OnInit {
     date: new FormControl(''),
 
   });
+  token:any=''
   submitted = false;
+  data:any
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [3, 6, 9, 12];
-  
+  res:any
+  news_data:any
   public editorValue: string = '';
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder) { }
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder,public http: HttpClient, public toster: ToastrService) { }
   selectFile(event: any) { //Angular 11, for stricter type
     if (!event.target.files[0] || event.target.files[0].length == 0) {
       this.msg = 'You must select an image';
@@ -57,13 +64,13 @@ export class LatestNewsComponent implements OnInit {
     reader.onload = (_event) => {
       this.msg = "";
       this.url = reader.result;
+      this.image_upload = event.target.files[0]
     }
   }
   ngOnInit() {
-    this.newsList = [{ 'title': 'Test', 'content': 'this is testing', 'image': '', 'date': '2022-06-17', 'status': 'Active' },
-    { 'title': 'About Us', 'content': 'this is testing', 'image': '', 'date': '2022-06-17', 'status': 'Active' },
-    { 'title': 'Abc', 'content': 'this is testing', 'image': '', 'date': '2022-06-17', 'status': 'Active' }]
+   this.token= localStorage.getItem('token')
     this.newsForm()
+    this.getNewsList()
   }
   public config: AngularEditorConfig = {
     editable: true,
@@ -133,17 +140,133 @@ export class LatestNewsComponent implements OnInit {
     return this.form.controls;
   }
   onSubmit(): void {
-    console.log(this.form.value);
+    console.log('Date',this.form.value.date)
     this.submitted = true;
-    if (this.form.invalid) {
+    if (this.form.invalid && this.form_type != 'edit') {
       return;
     }
-   
-    this.modalService.dismissAll()
-    this.submitted = false;
-    this.form.reset()
+
+    else {
+      if (this.form_type != 'edit') {
+        const headers = { 'Authorization': 'Bearer ' + this.token }
+        let formdata = new FormData()
+        formdata.append('title', this.form.value.title)
+        formdata.append('content', this.form.value.content)
+        formdata.append('date', this.form.value.date)
+        formdata.append('image', this.image_upload)
+        this.http.post<any>(this.baseUrl + 'api/latestnews', formdata, { 'headers': headers })
+          .subscribe(
+            response => {
+              this.data = response
+              console.log("Data" + this.data);
+              if (this.data.success == true) {
+                this.toster.success(this.data.message);
+              }
+              this.modalService.dismissAll()
+              this.submitted = false;
+              this.form.reset()
+              this.getNewsList()
+            },
+            error => {
+              console.log("Post failed with the errors", error.error);
+              if (error.error && error.error.success == false) {
+                this.toster.error(error.error.message);
+              } else {
+                this.toster.error('Oops something went wrong!!');
+              }
+            },
+            () => {
+              console.log("Post Completed");
+            }
+          );
+      }
+      if (this.form_type == 'edit') {
+        this.update()
+      }
+    }
+
+  }
+  edit() {
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.http.get<any>(this.baseUrl + 'api/latestnews/' + this.news_data.id + '/edit', { 'headers': headers })
+      .subscribe(data => {
+        console.log("Get completed sucessfully. The response received " + data);
+        this.res = data.data;
+        this.title = this.res.title
+        this.content = this.res.content
+        this.date = this.res.date
+        // this.image = this.res.image
+        console.log('UserList', this.res)
+        this.newsForm()
+      },
+        error => {
+          console.log("failed with the errors", error.error);
+          if (error.error) {
+            this.toster.error(error.error.message);
+          } else {
+            this.toster.error('Something went wrong');
+          }
+        }
+      );
   }
 
+  update() {
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    let formdata = new FormData()
+    formdata.append('title', this.form.value.title)
+    formdata.append('content', this.form.value.content)
+    formdata.append('date', this.form.value.date)
+    if (this.image_upload != undefined) {
+      formdata.append('image', this.image_upload)
+    }
+
+    formdata.append('_method', 'PATCH')
+    this.http.post<any>(this.baseUrl + 'api/latestnews/' + this.news_data.id, formdata, { 'headers': headers })
+      .subscribe(
+        response => {
+          this.data = response
+          console.log("Data" + this.data);
+          if (this.data.success == true) {
+            this.toster.success(this.data.message);
+          }
+          this.modalService.dismissAll()
+          this.submitted = false;
+          this.getNewsList()
+          this.form_type = ''
+          this.form.reset()
+        },
+        error => {
+          console.log("Post failed with the errors", error.error);
+          if (error.error && error.error.success == false) {
+            this.toster.error(error.error.message);
+          } else {
+            this.toster.error('Oops something went wrong!!');
+          }
+        },
+        () => {
+          console.log("Post Completed");
+        }
+      );
+  }
+  getNewsList() {
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.http.get<any>(this.baseUrl + 'api/latestnews', { 'headers': headers })
+      .subscribe(data => {
+        console.log("Get completed sucessfully. The response received " + data);
+        this.res = data.data;
+        this.newsList = this.res
+        console.log('newsList', this.newsList)
+      },
+        error => {
+          console.log("failed with the errors", error.error);
+          if (error.error) {
+            this.toster.error(error.error.message);
+          } else {
+            this.toster.error('Something went wrong');
+          }
+        }
+      );
+  }
   open(content: any, type: any, data: any) {
     if (type == 'edit') {
       this.title = data.title
@@ -179,5 +302,35 @@ export class LatestNewsComponent implements OnInit {
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
+  }
+  changeStatus(item) {
+    console.log('Item', item)
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    let formdata = new FormData()
+    formdata.append('id', item.id)
+    formdata.append('status', item.status)
+    this.http.post<any>(this.baseUrl + 'api/news_status', formdata, { 'headers': headers })
+      .subscribe(
+        response => {
+          this.data = response
+          console.log("Data" + this.data);
+          if (this.data.success == true) {
+            this.toster.success(this.data.message);
+          }
+          this.getNewsList()
+        },
+        error => {
+          console.log("Post failed with the errors", error.error);
+          if (error.error && error.error.success == false) {
+            this.toster.error(error.error.message);
+          } else {
+            this.toster.error('Oops something went wrong!!');
+          }
+        },
+        () => {
+          console.log("Post Completed");
+        }
+      );
+
   }
 }

@@ -25,6 +25,7 @@ import {ContactUsComponent} from '../contact-us/contact-us.component'
 import {LatestNewsComponent} from '../latest-news/latest-news.component'
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import {ImageGalleryComponent} from '../image-gallery/image-gallery.component'
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent,PrivacyComponent,TermsConditionComponent,ContactUsComponent,LatestNewsComponent,ImageGalleryComponent],
@@ -43,6 +44,7 @@ import {ImageGalleryComponent} from '../image-gallery/image-gallery.component'
     Ng2SearchPipeModule,
     NgxPaginationModule,
     AngularEditorModule,
+    HttpClientModule,
     AgmCoreModule.forRoot({
       apiKey: ''
     }),

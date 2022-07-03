@@ -7,6 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service';
 import * as firebase from 'firebase/app';
 
+import { HttpClient } from '@angular/common/http';
+
+
 export interface User {
   uid: string;
   email: string;
@@ -29,7 +32,7 @@ export class AuthService implements OnInit {
     public router: Router,
     public ngZone: NgZone,
     public toster: ToastrService,
-    private cookieService: CookieService) {
+    private cookieService: CookieService,public http: HttpClient) {
 
     this.afAuth.authState.subscribe(user => {
       if (user) {
@@ -48,6 +51,14 @@ export class AuthService implements OnInit {
 
   // sign in function
   SignIn(email, password) {
+
+  //   this.http.get<any[]>(this.baseUrl+'users/'+this.userName+'/repos')
+  //          .subscribe(data => {
+  //              this.res= data;
+  //          },
+  //          error => {
+  //          }
+  // );
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
         if (result.user.emailVerified !== true) {

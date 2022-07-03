@@ -10,9 +10,9 @@
         </div>
         <div class="d-flex bd-highlight mb-3">
           <div class="p-2 w-100 bd-highlight">
-         
-              <input matInput type="search" placeholder="" class="search-input" [(ngModel)]="searchUser">
-            
+
+            <input matInput type="search" placeholder="" class="search-input" [(ngModel)]="searchUser">
+
           </div>
           <div class="p-2 flex-shrink-2 bd-highlight"> <a href="javaScript:void(0);" class="btn btn-info"
               (click)="open(addService,'',null)">Add Service</a></div>
@@ -24,6 +24,8 @@
               <tr>
                 <th scope="col">S.no</th>
                 <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Image</th>
                 <th scope="col">Status</th>
                 <th scope="col">Actions</th>
               </tr>
@@ -37,11 +39,18 @@
                 }; let i = index">
                 <td>{{i+1}}</td>
                 <td>{{item.name}} </td>
-                <td>{{item.status}}</td>
-                  <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
-                    href="javascript:void(0)" (click)="open(addService,'edit',item)"><i class="fa fa-pencil" ></i> Edit</a><a class="icon"
-                    href="javascript:void(0)"></a><a
-                    class="btn btn-danger btn-sm" href="javascript:void(0)"  (click)="open(delmodal,'',item)"><i class="fa fa-trash"></i> Delete</a>
+                <td>{{item.description}} </td>
+                <td><img [src]="baseUrl+item.image" *ngIf="item.image" width="100" height="100"></td>
+                <td>
+                  <div (click)="changeStatus(item)">
+                    <i class="fa fa-check" aria-hidden="true" *ngIf="item.status == 1"></i>
+                    <i class="fa fa-times" aria-hidden="true" *ngIf="item.status == 0"></i>
+                  </div>
+                </td>
+                <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
+                    href="javascript:void(0)" (click)="open(addService,'edit',item)"><i class="fa fa-pencil"></i>
+                    Edit</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm"
+                    href="javascript:void(0)" (click)="open(delmodal,'',item)"><i class="fa fa-trash"></i> Delete</a>
                 </td>
               </tr>
 
@@ -83,14 +92,50 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label>Service Name</label>
-        <input type="text" formControlName="serviceName" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['serviceName'].errors }" />
-        <div *ngIf="submitted && f['serviceName'].errors" class="invalid-feedback">
-          <div *ngIf="f['serviceName'].errors['required']">Service Name is required</div>
-          <div *ngIf="f['serviceName'].errors['minlength']">
+        <input type="text" formControlName="name" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" />
+        <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+          <div *ngIf="f['name'].errors['required']">Service Name is required</div>
+          <div *ngIf="f['name'].errors['minlength']">
             Service Name must be at least 4 characters
           </div>
-        
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Alies Name</label>
+        <input type="text" formControlName="alies_name" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['alies_name'].errors }" />
+        <div *ngIf="submitted && f['alies_name'].errors" class="invalid-feedback">
+          <div *ngIf="f['alies_name'].errors['required']">Alies Name is required</div>
+          <div *ngIf="f['alies_name'].errors['minlength']">
+            Alies Name must be at least 4 characters
+          </div>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea formControlName="description" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"> </textarea>
+        <div *ngIf="submitted && f['description'].errors" class="invalid-feedback">
+          <div *ngIf="f['description'].errors['required']">Description is required</div>
+          <div *ngIf="f['description'].errors['minlength']">
+            Description must be at least 10 characters
+          </div>
+        </div>
+      </div>
+      <div *ngIf="form_type=='edit' && user_data != null">
+        <img [src]="baseUrl+user_data.image" *ngIf="user_data.image" width="200" height="200">
+      </div>
+      <div class="form-group">
+        <label>Image</label>
+        <input type="file" (change)="selectFile($event)" formControlName="image" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['image'].errors }">
+
+
+        <div *ngIf="submitted && form_type != 'edit' && f['image'].errors" class="invalid-feedback">
+          <div *ngIf="f['image'].errors['required']">Plesae choose the image.</div>
         </div>
       </div>
       <div class="form-group">
