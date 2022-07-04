@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import * as moment from 'moment';
+
 
 
 @Component({
@@ -18,15 +20,15 @@ export class LatestNewsComponent implements OnInit {
   newsList: any = []
   searchUser: any
   closeResult: string = '';
-  image_upload:any
-  form_type:any=''
+  image_upload: any
+  form_type: any = ''
   title: any = ''
   content: any = ''
   image: any = ''
   baseUrl: any = 'http://api.gurdevhospital.co/'
   url: any; //Angular 11, for stricter type
   msg = "";
-  date: NgbDateStruct;
+  date: any;
   form: FormGroup = new FormGroup({
     title: new FormControl(''),
     content: new FormControl(''),
@@ -34,17 +36,26 @@ export class LatestNewsComponent implements OnInit {
     date: new FormControl(''),
 
   });
-  token:any=''
+  token: any = ''
   submitted = false;
-  data:any
+  data: any
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
   tableSizes: any = [3, 6, 9, 12];
-  res:any
-  news_data:any
+  res: any
+  news_data: any
   public editorValue: string = '';
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder,public http: HttpClient, public toster: ToastrService) { }
+  bsValue = new Date();
+  bsRangeValue: Date[];
+  maxDate = new Date();
+  minDate = new Date();
+
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService) {
+    this.minDate.setDate(this.minDate.getDate() - 1);
+    this.maxDate.setDate(this.maxDate.getDate() + 7);
+    this.bsRangeValue = [this.bsValue, this.maxDate];
+  }
   selectFile(event: any) { //Angular 11, for stricter type
     if (!event.target.files[0] || event.target.files[0].length == 0) {
       this.msg = 'You must select an image';
@@ -68,7 +79,7 @@ export class LatestNewsComponent implements OnInit {
     }
   }
   ngOnInit() {
-   this.token= localStorage.getItem('token')
+    this.token = localStorage.getItem('token')
     this.newsForm()
     this.getNewsList()
   }
@@ -140,7 +151,7 @@ export class LatestNewsComponent implements OnInit {
     return this.form.controls;
   }
   onSubmit(): void {
-    console.log('Date',this.form.value.date)
+    console.log('Date', moment(this.form.value.date).format('YYYY-MM-DD'))
     this.submitted = true;
     if (this.form.invalid && this.form_type != 'edit') {
       return;
@@ -152,7 +163,7 @@ export class LatestNewsComponent implements OnInit {
         let formdata = new FormData()
         formdata.append('title', this.form.value.title)
         formdata.append('content', this.form.value.content)
-        formdata.append('date', this.form.value.date)
+        formdata.append('date', moment(this.form.value.date).format('YYYY-MM-DD'))
         formdata.append('image', this.image_upload)
         this.http.post<any>(this.baseUrl + 'api/latestnews', formdata, { 'headers': headers })
           .subscribe(
@@ -194,9 +205,9 @@ export class LatestNewsComponent implements OnInit {
         this.res = data.data;
         this.title = this.res.title
         this.content = this.res.content
-        this.date = this.res.date
+        this.date = moment(this.res.date).format('YYYY-MM-DD')
         // this.image = this.res.image
-        console.log('UserList', this.res)
+        console.log('NewsList', this.res)
         this.newsForm()
       },
         error => {
@@ -215,7 +226,7 @@ export class LatestNewsComponent implements OnInit {
     let formdata = new FormData()
     formdata.append('title', this.form.value.title)
     formdata.append('content', this.form.value.content)
-    formdata.append('date', this.form.value.date)
+    formdata.append('date', moment(this.form.value.date).format('YYYY-MM-DD'))
     if (this.image_upload != undefined) {
       formdata.append('image', this.image_upload)
     }
@@ -268,24 +279,18 @@ export class LatestNewsComponent implements OnInit {
       );
   }
   open(content: any, type: any, data: any) {
+    this.news_data = data
     if (type == 'edit') {
-      this.title = data.title
-      this.content = data.content
-      this.image = data.image
-      this.date = data.date
-      console.log('^^', this.date)
+      this.form_type = 'edit'
+      this.edit()
     } else {
       this.submitted = false
-      this.form.reset()
     }
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    if (type == 'edit') {
-      this.newsForm()
-    }
   }
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {

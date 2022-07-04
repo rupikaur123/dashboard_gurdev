@@ -19,20 +19,30 @@ import { ServicesComponent } from '../services/services.component'
 import { AppointmentsComponent } from '../appointments/appointments.component'
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AboutComponent } from '../about/about.component'
-import {PrivacyComponent} from '../privacy/privacy.component'
-import {TermsConditionComponent} from '../terms-condition/terms-condition.component'
-import {ContactUsComponent} from '../contact-us/contact-us.component'
-import {LatestNewsComponent} from '../latest-news/latest-news.component'
+import { PrivacyComponent } from '../privacy/privacy.component'
+import { TermsConditionComponent } from '../terms-condition/terms-condition.component'
+import { ContactUsComponent } from '../contact-us/contact-us.component'
+import { LatestNewsComponent } from '../latest-news/latest-news.component'
 import { AngularEditorModule } from '@kolkov/angular-editor';
-import {ImageGalleryComponent} from '../image-gallery/image-gallery.component'
+import { ImageGalleryComponent } from '../image-gallery/image-gallery.component'
 import { HttpClientModule } from '@angular/common/http';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input'
+import { BsDatepickerModule,BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
+
+
 @NgModule({
-  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent,PrivacyComponent,TermsConditionComponent,ContactUsComponent,LatestNewsComponent,ImageGalleryComponent],
+  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent],
   imports: [
     CommonModule,
     ChartistModule,
     ChartsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
     NgApexchartsModule,
     SharedModule,
     CarouselModule,
@@ -45,10 +55,12 @@ import { HttpClientModule } from '@angular/common/http';
     NgxPaginationModule,
     AngularEditorModule,
     HttpClientModule,
-    AgmCoreModule.forRoot({
+    BsDatepickerModule.forRoot(),
+   AgmCoreModule.forRoot({
       apiKey: ''
     }),
     DashboardRoutingModule
-  ]
+  ],
+  providers:[BsDatepickerConfig]
 })
 export class DashboardModule { }
