@@ -10,9 +10,9 @@
         </div>
         <div class="d-flex bd-highlight mb-3">
           <div class="p-2 w-100 bd-highlight">
-         
-              <input matInput type="search" placeholder="" class="search-input" [(ngModel)]="searchUser">
-            
+
+            <input matInput type="search" placeholder="" class="search-input" [(ngModel)]="searchUser">
+
           </div>
         </div>
         <div class="table-responsive">
@@ -20,24 +20,36 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col">S.no</th>
-                <th scope="col">Name</th>
-                <th scope="col">Status</th>
+                <th scope="col">Service Name</th>
+                <th scope="col">Appointment Date</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">DOB</th>
+                <th scope="col">Address</th>
+                <th scope="col">Phone No.</th>
+                <th scope="col">Comment</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of userList | filter:searchUser | paginate
+              <tr *ngFor="let item of apptList | filter:searchUser | paginate
               : {
                   itemsPerPage: tableSize,
                   currentPage: page,
                   totalItems: count
                 }; let i = index">
                 <td>{{i+1}}</td>
-                <td>{{item.name}} </td>
-                <td>{{item.status}}</td>
-                  <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
-                    href="javascript:void(0)" (click)="open(viewAppt,'edit',item)"><i class="fa fa-pencil" ></i> View</a><a class="icon"
-                    href="javascript:void(0)"></a>
+                <td>{{item.service_name}} </td>
+                <td>{{item.appointment_date}}</td>
+                <td>{{item.u_full_name}}</td>
+                <td>{{item.u_email}}</td>
+                <td>{{item.u_dob}} </td>
+                <td>{{item.u_address}}</td>
+                <td>{{item.u_phone_number}}</td>
+                <td>{{item.comment}}</td>
+                <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
+                    href="javascript:void(0)" (click)="open(viewAppt,'edit',item)"><i class="fa fa-pencil"></i>
+                    View</a><a class="icon" href="javascript:void(0)"></a>
                 </td>
               </tr>
 
@@ -78,7 +90,7 @@
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label>Appoinment Name</label>
+        <label>Service Name</label>
         <input type="text" formControlName="apptName" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['apptName'].errors }" />
         <div *ngIf="submitted && f['apptName'].errors" class="invalid-feedback">
@@ -86,7 +98,66 @@
           <div *ngIf="f['apptName'].errors['minlength']">
             Appointment must be at least 4 characters
           </div>
-        
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Appoinment Date</label>
+        <input type="text" formControlName="apptDate" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['apptDate'].errors }" />
+        <div *ngIf="submitted && f['apptDate'].errors" class="invalid-feedback">
+          <div *ngIf="f['apptDate'].errors['required']">Appointment Date is required</div>
+         
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" formControlName="fullName" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['fullName'].errors }" />
+        <div *ngIf="submitted && f['fullName'].errors" class="invalid-feedback">
+          <div *ngIf="f['fullName'].errors['required']">Full Name is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" formControlName="email" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
+        <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+          <div *ngIf="f['email'].errors['required']">Email is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>DOB</label>
+        <input type="text" formControlName="dob" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }" />
+        <div *ngIf="submitted && f['dob'].errors" class="invalid-feedback">
+          <div *ngIf="f['dob'].errors['required']">DOB is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Address</label>
+        <input type="text" formControlName="address" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" />
+        <div *ngIf="submitted && f['address'].errors" class="invalid-feedback">
+          <div *ngIf="f['address'].errors['required']">Address is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Phone No.</label>
+        <input type="text" formControlName="phone_no" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['phone_no'].errors }" />
+        <div *ngIf="submitted && f['phone_no'].errors" class="invalid-feedback">
+          <div *ngIf="f['phone_no'].errors['required']">Phone No. is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Comment</label>
+        <input type="text" formControlName="comment" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['comment'].errors }" />
+        <div *ngIf="submitted && f['comment'].errors" class="invalid-feedback">
+          <div *ngIf="f['comment'].errors['required']">Comment is required</div>
         </div>
       </div>
       <div class="form-group">
