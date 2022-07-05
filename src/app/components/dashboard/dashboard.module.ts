@@ -30,12 +30,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input'
-import { BsDatepickerModule,BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-
-
+import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { ReviewsComponent } from '../reviews/reviews.component'
+import {StaticPagesComponent} from '../static-pages/static-pages.component'
 
 @NgModule({
-  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent],
+  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent],
   imports: [
     CommonModule,
     ChartistModule,
@@ -56,11 +56,11 @@ import { BsDatepickerModule,BsDatepickerConfig } from 'ngx-bootstrap/datepicker'
     AngularEditorModule,
     HttpClientModule,
     BsDatepickerModule.forRoot(),
-   AgmCoreModule.forRoot({
+    AgmCoreModule.forRoot({
       apiKey: ''
     }),
     DashboardRoutingModule
   ],
-  providers:[BsDatepickerConfig]
+  providers: [BsDatepickerConfig]
 })
 export class DashboardModule { }

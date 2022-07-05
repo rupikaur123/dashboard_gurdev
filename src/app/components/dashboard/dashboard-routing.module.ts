@@ -9,7 +9,9 @@ import { PrivacyComponent } from '../privacy/privacy.component'
 import { TermsConditionComponent } from '../terms-condition/terms-condition.component'
 import { ContactUsComponent } from '../contact-us/contact-us.component'
 import { LatestNewsComponent } from '../latest-news/latest-news.component'
-import {ImageGalleryComponent} from '../image-gallery/image-gallery.component'
+import { ImageGalleryComponent } from '../image-gallery/image-gallery.component'
+import { ReviewsComponent } from '../reviews/reviews.component'
+import {StaticPagesComponent} from '../static-pages/static-pages.component'
 
 
 const routes: Routes = [
@@ -53,8 +55,15 @@ const routes: Routes = [
         component: LatestNewsComponent
       },
       {
-        path:'gallery',
-        component:ImageGalleryComponent
+        path: 'gallery',
+        component: ImageGalleryComponent
+      }, {
+        path: 'reviews',
+        component: ReviewsComponent
+      },
+      {
+        path:'static',
+        component:StaticPagesComponent
       }
     ],
   }
