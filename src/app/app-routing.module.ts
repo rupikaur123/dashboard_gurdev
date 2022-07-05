@@ -21,13 +21,13 @@ const routes: Routes = [
   {
     path: '',
     component: ContentComponent,
-    // canActivate: [AdminGuard],
+    canActivate: [AdminGuard],
     children: content
   },
   {
     path: '',
     component: FullComponent,
-    // canActivate: [AdminGuard],
+    canActivate: [AdminGuard],
     children: full
   },
   {
@@ -41,8 +41,8 @@ const routes: Routes = [
     anchorScrolling: 'enabled',
     scrollPositionRestoration: 'enabled',
     relativeLinkResolution: 'legacy'
-})],
-],
+  })],
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
