@@ -13,7 +13,7 @@
         <div class="d-flex bd-highlight mb-3">
           <div class="p-2 w-100 bd-highlight">
 
-            <input matInput type="search" placeholder="" class="search-input" [(ngModel)]="searchUser">
+            <input matInput type="search" placeholder="Search" class="search-input" [(ngModel)]="searchUser">
 
           </div>
           <div class="p-2 flex-shrink-2 bd-highlight"> <a href="javaScript:void(0);" class="btn btn-info"
@@ -54,8 +54,9 @@
                 </td>
                 <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
                     href="javascript:void(0)" (click)="open(addService,'edit',item)"><i class="fa fa-pencil"></i>
-                    Edit</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm"
-                    href="javascript:void(0)" (click)="open(delmodal,'',item)"><i class="fa fa-trash"></i> Delete</a>
+                    Edit</a> 
+                    <!-- <a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm"
+                    href="javascript:void(0)" (click)="open(delmodal,'',item)"><i class="fa fa-trash"></i> Delete</a> -->
                 </td>
               </tr>
 
@@ -88,8 +89,9 @@
 
 <ng-template #addService let-modal>
   <div class="modal-header">
-    <strong class="modal-title" id="modal-basic-title">Create Latest News</strong>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <strong class="modal-title" id="modal-basic-title" *ngIf="form_type!='edit'">Create Latest News</strong>
+    <strong class="modal-title" id="modal-basic-title" *ngIf="form_type=='edit'">Update Latest News</strong>
+    <button type="button" class="close" aria-label="Close" (click)="close()">
       <span aria-hidden="true">×</span>
     </button>
   </div>
@@ -107,7 +109,7 @@
 
         </div>
       </div>
-      <div *ngIf="form_type=='edit' && news_data != null">
+      <div *ngIf="form_type=='edit' && news_data != null && url != true">
         <img [src]="baseUrl+news_data.image" *ngIf="news_data.image" width="200" height="200">
       </div>
       <div class="form-group">
@@ -154,7 +156,8 @@
 
 
       <div class="form-group">
-        <button class="btn btn-primary btn-block">Create</button>
+        <button class="btn btn-primary btn-block" *ngIf="form_type!='edit'">Create</button>
+        <button class="btn btn-primary btn-block" *ngIf="form_type=='edit'">Update</button>
       </div>
     </form>
   </div>

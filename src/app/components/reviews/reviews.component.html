@@ -13,7 +13,7 @@
         <div class="d-flex bd-highlight mb-3">
           <div class="p-2 w-100 bd-highlight">
 
-            <input matInput type="search" placeholder="" class="search-input" [(ngModel)]="searchUser">
+            <input matInput type="search" placeholder="Search" class="search-input" [(ngModel)]="searchUser">
 
           </div>
           <div class="p-2 flex-shrink-2 bd-highlight"> <a href="javaScript:void(0);" class="btn btn-info"
@@ -83,8 +83,9 @@
 
 <ng-template #addService let-modal>
   <div class="modal-header">
-    <strong class="modal-title" id="modal-basic-title">Create Review</strong>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <strong class="modal-title" id="modal-basic-title" *ngIf="form_type!='edit'">Create Review</strong>
+    <strong class="modal-title" id="modal-basic-title" *ngIf="form_type=='edit'">Update Review</strong>
+    <button type="button" class="close" aria-label="Close" (click)="close()">
       <span aria-hidden="true">×</span>
     </button>
   </div>
@@ -92,8 +93,8 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label>Review</label>
-        <input type="text" formControlName="review" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['review'].errors }" />
+        <textarea type="text" formControlName="review" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['review'].errors }"></textarea>
         <div *ngIf="submitted && f['review'].errors" class="invalid-feedback">
           <div *ngIf="f['review'].errors['required']">Review is required</div>
           <div *ngIf="f['review'].errors['minlength']">
@@ -102,7 +103,7 @@
 
         </div>
       </div>
-      <div *ngIf="form_type=='edit' && news_data != null">
+      <div *ngIf="form_type=='edit' && news_data != null && url != true">
         <img [src]="baseUrl+news_data.image" *ngIf="news_data.image" width="200" height="200">
       </div>
       <div class="form-group">
@@ -117,7 +118,8 @@
       </div>
   
       <div class="form-group">
-        <button class="btn btn-primary btn-block">Create</button>
+        <button class="btn btn-primary btn-block" *ngIf="form_type!='edit'">Create</button>
+        <button class="btn btn-primary btn-block" *ngIf="form_type=='edit'">Update</button>
       </div>
     </form>
   </div>

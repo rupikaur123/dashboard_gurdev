@@ -25,7 +25,7 @@ export class ReviewsComponent implements OnInit {
   review: any = ''
   image: any = ''
   baseUrl: any = 'http://api.gurdevhospital.co/'
-  url: any; //Angular 11, for stricter type
+  url: any = false; //Angular 11, for stricter type
   msg = "";
   date: any;
   form: FormGroup = new FormGroup({
@@ -70,7 +70,7 @@ export class ReviewsComponent implements OnInit {
 
     reader.onload = (_event) => {
       this.msg = "";
-      this.url = reader.result;
+      this.url = true;
       this.image_upload = event.target.files[0]
     }
   }
@@ -158,6 +158,7 @@ export class ReviewsComponent implements OnInit {
               }
               this.modalService.dismissAll()
               this.submitted = false;
+              this.url = false;
               this.form.reset()
               this.getReviewsList()
             },
@@ -219,9 +220,11 @@ export class ReviewsComponent implements OnInit {
           }
           this.modalService.dismissAll()
           this.submitted = false;
-          this.getReviewsList()
+          this.url = false;
           this.form_type = ''
           this.form.reset()
+          this.getReviewsList()
+         
         },
         error => {
           console.log("Post failed with the errors", error.error);
@@ -314,6 +317,10 @@ export class ReviewsComponent implements OnInit {
         }
       );
 
+  }
+  close(){
+    this.modalService.dismissAll()
+    this.form.reset()
   }
   delete() {
     const headers = { 'Authorization': 'Bearer ' + this.token }

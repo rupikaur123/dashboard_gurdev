@@ -26,7 +26,7 @@ export class StaticPagesComponent implements OnInit {
   content: any
   image: any = ''
   baseUrl: any = 'http://api.gurdevhospital.co/'
-  url: any; //Angular 11, for stricter type
+  url: any=false; //Angular 11, for stricter type
   msg = "";
   form: FormGroup = new FormGroup({
     title: new FormControl(''),
@@ -71,7 +71,7 @@ export class StaticPagesComponent implements OnInit {
 
     reader.onload = (_event) => {
       this.msg = "";
-      this.url = reader.result;
+      this.url = true;
       this.image_upload = event.target.files[0]
     }
   }
@@ -142,6 +142,10 @@ export class StaticPagesComponent implements OnInit {
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
   }
+  close(){
+    this.modalService.dismissAll()
+    this.form.reset()
+  }
   onSubmit(): void {
     this.submitted = true;
     if (this.form.invalid && this.form_type != 'edit') {
@@ -165,6 +169,7 @@ export class StaticPagesComponent implements OnInit {
               }
               this.modalService.dismissAll()
               this.submitted = false;
+              this.url= false
               this.form.reset()
               this.getReviewsList()
             },
@@ -230,9 +235,11 @@ export class StaticPagesComponent implements OnInit {
           }
           this.modalService.dismissAll()
           this.submitted = false;
-          this.getReviewsList()
+          this.url= false
           this.form_type = ''
           this.form.reset()
+          this.getReviewsList()
+        
         },
         error => {
           console.log("Post failed with the errors", error.error);

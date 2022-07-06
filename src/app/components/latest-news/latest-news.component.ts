@@ -26,7 +26,7 @@ export class LatestNewsComponent implements OnInit {
   content: any = ''
   image: any = ''
   baseUrl: any = 'http://api.gurdevhospital.co/'
-  url: any; //Angular 11, for stricter type
+  url: any= false; //Angular 11, for stricter type
   msg = "";
   date: any;
   form: FormGroup = new FormGroup({
@@ -74,7 +74,8 @@ export class LatestNewsComponent implements OnInit {
 
     reader.onload = (_event) => {
       this.msg = "";
-      this.url = reader.result;
+      // this.url = reader.result;
+      this.url = true
       this.image_upload = event.target.files[0]
     }
   }
@@ -151,7 +152,7 @@ export class LatestNewsComponent implements OnInit {
     return this.form.controls;
   }
   onSubmit(): void {
-    console.log('Date', moment(this.form.value.date).format('YYYY-MM-DD'))
+    // console.log('Date', moment(this.form.value.date).format('YYYY-MM-DD'))
     this.submitted = true;
     if (this.form.invalid && this.form_type != 'edit') {
       return;
@@ -176,6 +177,7 @@ export class LatestNewsComponent implements OnInit {
               this.modalService.dismissAll()
               this.submitted = false;
               this.form.reset()
+              this.url = false
               this.getNewsList()
             },
             error => {
@@ -241,10 +243,12 @@ export class LatestNewsComponent implements OnInit {
             this.toster.success(this.data.message);
           }
           this.modalService.dismissAll()
+          this.form.reset()
           this.submitted = false;
           this.getNewsList()
           this.form_type = ''
-          this.form.reset()
+          this.url = false
+        
         },
         error => {
           console.log("Post failed with the errors", error.error);
@@ -337,5 +341,9 @@ export class LatestNewsComponent implements OnInit {
         }
       );
 
+  }
+  close(){
+    this.modalService.dismissAll()
+    this.form.reset()
   }
 }
