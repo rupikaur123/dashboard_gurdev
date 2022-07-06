@@ -35,9 +35,10 @@ import { ReviewsComponent } from '../reviews/reviews.component'
 import {StaticPagesComponent} from '../static-pages/static-pages.component'
 import { AddServicesComponent} from '../add-services/add-services.component'
 import {AddNewsComponent} from '../add-news/add-news.component'
+import {AddStaticPagesComponent} from '../add-static-page/add-static-page.component'
 
 @NgModule({
-  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent,AddNewsComponent],
+  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent,AddNewsComponent,AddStaticPagesComponent],
   imports: [
     CommonModule,
     ChartistModule,

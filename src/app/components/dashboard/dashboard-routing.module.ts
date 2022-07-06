@@ -14,6 +14,7 @@ import { ReviewsComponent } from '../reviews/reviews.component'
 import {StaticPagesComponent} from '../static-pages/static-pages.component'
 import { AddServicesComponent} from '../add-services/add-services.component'
 import {AddNewsComponent} from '../add-news/add-news.component'
+import {AddStaticPagesComponent} from '../add-static-page/add-static-page.component'
 
 
 const routes: Routes = [
@@ -82,6 +83,12 @@ const routes: Routes = [
       {
         path:'add/news/:id',
         component:AddNewsComponent
+      },{
+        path:'add/page',
+      component:AddStaticPagesComponent  
+      },{
+        path:'add/page/:id',
+      component:AddStaticPagesComponent  
       }
     ],
   }
