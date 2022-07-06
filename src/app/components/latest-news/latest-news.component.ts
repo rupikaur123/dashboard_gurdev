@@ -6,6 +6,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 
 
@@ -29,13 +30,6 @@ export class LatestNewsComponent implements OnInit {
   url: any= false; //Angular 11, for stricter type
   msg = "";
   date: any;
-  form: FormGroup = new FormGroup({
-    title: new FormControl(''),
-    content: new FormControl(''),
-    image: new FormControl(''),
-    date: new FormControl(''),
-
-  });
   token: any = ''
   submitted = false;
   data: any
@@ -51,7 +45,7 @@ export class LatestNewsComponent implements OnInit {
   maxDate = new Date();
   minDate = new Date();
 
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService) {
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router:Router) {
     this.minDate.setDate(this.minDate.getDate() - 1);
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
@@ -81,188 +75,10 @@ export class LatestNewsComponent implements OnInit {
   }
   ngOnInit() {
     this.token = localStorage.getItem('token')
-    this.newsForm()
     this.getNewsList()
   }
-  public config: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '15rem',
-    minHeight: '5rem',
-    placeholder: 'Enter text here...',
-    translate: 'no',
-    customClasses: [
-      {
-        name: "quote",
-        class: "quote",
-      },
-      {
-        name: 'redText',
-        class: 'redText'
-      },
-      {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
-      },
-    ]
-  }
-
-  public editorConfig = {
-    editable: true,
-    spellcheck: false,
-    height: '10rem',
-    minHeight: '5rem',
-    placeholder: 'Type something. Test the Editor... ヽ(^。^)丿',
-    translate: 'no'
-  }
-  newsForm() {
-    this.form = this.formBuilder.group(
-      {
-        title: [
-          this.title,
-          [
-            Validators.required,
-            Validators.minLength(4),
-          ]
-        ],
-        content: [
-          this.content,
-          [
-            Validators.required,
-          ]
-        ],
-        image: [
-          this.image,
-          [
-            Validators.required,
-          ]
-        ], date: [
-          this.date,
-          [
-            Validators.required,
-          ]
-        ]
-
-      }
-    );
-  }
-
-  get f(): { [key: string]: AbstractControl } {
-    return this.form.controls;
-  }
-  onSubmit(): void {
-    // console.log('Date', moment(this.form.value.date).format('YYYY-MM-DD'))
-    this.submitted = true;
-    if (this.form.invalid && this.form_type != 'edit') {
-      return;
-    }
-
-    else {
-      if (this.form_type != 'edit') {
-        const headers = { 'Authorization': 'Bearer ' + this.token }
-        let formdata = new FormData()
-        formdata.append('title', this.form.value.title)
-        formdata.append('content', this.form.value.content)
-        formdata.append('date', moment(this.form.value.date).format('YYYY-MM-DD'))
-        formdata.append('image', this.image_upload)
-        this.http.post<any>(this.baseUrl + 'api/latestnews', formdata, { 'headers': headers })
-          .subscribe(
-            response => {
-              this.data = response
-              console.log("Data" + this.data);
-              if (this.data.success == true) {
-                this.toster.success(this.data.message);
-              }
-              this.modalService.dismissAll()
-              this.submitted = false;
-              this.form.reset()
-              this.url = false
-              this.getNewsList()
-            },
-            error => {
-              console.log("Post failed with the errors", error.error);
-              if (error.error && error.error.success == false) {
-                this.toster.error(error.error.message);
-              } else {
-                this.toster.error('Oops something went wrong!!');
-              }
-            },
-            () => {
-              console.log("Post Completed");
-            }
-          );
-      }
-      if (this.form_type == 'edit') {
-        this.update()
-      }
-    }
-
-  }
-  edit() {
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/latestnews/' + this.news_data.id + '/edit', { 'headers': headers })
-      .subscribe(data => {
-        console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.title = this.res.title
-        this.content = this.res.content
-        this.date = moment(this.res.date).format('YYYY-MM-DD')
-        // this.image = this.res.image
-        console.log('NewsList', this.res)
-        this.newsForm()
-      },
-        error => {
-          console.log("failed with the errors", error.error);
-          if (error.error) {
-            this.toster.error(error.error.message);
-          } else {
-            this.toster.error('Something went wrong');
-          }
-        }
-      );
-  }
-
-  update() {
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    let formdata = new FormData()
-    formdata.append('title', this.form.value.title)
-    formdata.append('content', this.form.value.content)
-    formdata.append('date', moment(this.form.value.date).format('YYYY-MM-DD'))
-    if (this.image_upload != undefined) {
-      formdata.append('image', this.image_upload)
-    }
-
-    formdata.append('_method', 'PATCH')
-    this.http.post<any>(this.baseUrl + 'api/latestnews/' + this.news_data.id, formdata, { 'headers': headers })
-      .subscribe(
-        response => {
-          this.data = response
-          console.log("Data" + this.data);
-          if (this.data.success == true) {
-            this.toster.success(this.data.message);
-          }
-          this.modalService.dismissAll()
-          this.form.reset()
-          this.submitted = false;
-          this.getNewsList()
-          this.form_type = ''
-          this.url = false
-        
-        },
-        error => {
-          console.log("Post failed with the errors", error.error);
-          if (error.error && error.error.success == false) {
-            this.toster.error(error.error.message);
-          } else {
-            this.toster.error('Oops something went wrong!!');
-          }
-        },
-        () => {
-          console.log("Post Completed");
-        }
-      );
-  }
+ 
+ 
   getNewsList() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
     this.http.get<any>(this.baseUrl + 'api/latestnews', { 'headers': headers })
@@ -283,28 +99,14 @@ export class LatestNewsComponent implements OnInit {
       );
   }
   open(content: any, type: any, data: any) {
-    this.news_data = data
     if (type == 'edit') {
       this.form_type = 'edit'
-      this.edit()
+      this.router.navigate(['dashboard/add/news/'+data.id])
     } else {
-      this.submitted = false
-    }
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
+      this.router.navigate(['dashboard/add/news'])
     }
   }
+ 
   onTableDataChange(event: any) {
     this.page = event;
   }
@@ -342,8 +144,5 @@ export class LatestNewsComponent implements OnInit {
       );
 
   }
-  close(){
-    this.modalService.dismissAll()
-    this.form.reset()
-  }
+ 
 }

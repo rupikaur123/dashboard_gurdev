@@ -34,9 +34,10 @@ import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker
 import { ReviewsComponent } from '../reviews/reviews.component'
 import {StaticPagesComponent} from '../static-pages/static-pages.component'
 import { AddServicesComponent} from '../add-services/add-services.component'
+import {AddNewsComponent} from '../add-news/add-news.component'
 
 @NgModule({
-  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent],
+  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent,AddNewsComponent],
   imports: [
     CommonModule,
     ChartistModule,

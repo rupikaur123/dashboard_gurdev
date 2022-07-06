@@ -13,6 +13,7 @@ import { ImageGalleryComponent } from '../image-gallery/image-gallery.component'
 import { ReviewsComponent } from '../reviews/reviews.component'
 import {StaticPagesComponent} from '../static-pages/static-pages.component'
 import { AddServicesComponent} from '../add-services/add-services.component'
+import {AddNewsComponent} from '../add-news/add-news.component'
 
 
 const routes: Routes = [
@@ -73,6 +74,14 @@ const routes: Routes = [
       {
         path:'add/service/:id',
         component:AddServicesComponent
+      },
+      {
+        path:'add/news',
+        component:AddNewsComponent
+      },
+      {
+        path:'add/news/:id',
+        component:AddNewsComponent
       }
     ],
   }

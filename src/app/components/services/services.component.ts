@@ -19,21 +19,9 @@ export class ServicesComponent implements OnInit {
   closeResult: string = '';
   serviceName: any = ''
   token: any
-  image: any = ''
-  description: any = ''
-  alies_name: any = ''
   url: any = false; //Angular 11, for stricter type
   msg = "";
-  user_data: any
-  form: FormGroup = new FormGroup({
-    name: new FormControl(''),
-    image: new FormControl(''),
-    description: new FormControl(''),
-    alies_name: new FormControl('')
-
-  });
   submitted = false;
-  form_type: any
   page: number = 1;
   count: number = 0;
   tableSize: number = 7;
@@ -46,7 +34,6 @@ export class ServicesComponent implements OnInit {
 
   ngOnInit() {
     this.userList = []
-    this.userForm()
     this.token = localStorage.getItem('token')
     this.getServiceList()
   }
@@ -71,199 +58,15 @@ export class ServicesComponent implements OnInit {
       );
   }
 
-  userForm() {
-    this.form = this.formBuilder.group(
-      {
-        name: [
-          this.serviceName,
-          [
-            Validators.required,
-            Validators.minLength(4),
-          ]
-        ],
-        description: [
-          this.description,
-          [
-            Validators.required,
-            Validators.minLength(10),
-          ]
-        ],
-        image: [
-          this.image,
-          [
-            Validators.required,
-          ]
-        ],
-        alies_name: [
-          this.alies_name,
-          [
-            Validators.required,
-            Validators.minLength(4),
-          ]
-        ]
-      }
-    );
-  }
-
-  get f(): { [key: string]: AbstractControl } {
-    return this.form.controls;
-  }
-  onSubmit(): void {
-    console.log(this.form.value.name);
-    this.submitted = true;
-    if (this.form.invalid && this.form_type != 'edit') {
-      return;
-    }
-
-    else {
-      if (this.form_type != 'edit') {
-        const headers = { 'Authorization': 'Bearer ' + this.token }
-        let formdata = new FormData()
-        formdata.append('name', this.form.value.name)
-        formdata.append('description', this.form.value.description)
-        formdata.append('alies_name', this.form.value.alies_name)
-        formdata.append('image', this.image_upload)
-        this.http.post<any>(this.baseUrl + 'api/services', formdata, { 'headers': headers })
-          .subscribe(
-            response => {
-              this.data = response
-              console.log("Data" + this.data);
-              if (this.data.success == true) {
-                this.toster.success(this.data.message);
-              }
-              this.modalService.dismissAll()
-              this.submitted = false;
-              this.form.reset()
-              this.url = false
-              this.getServiceList()
-            },
-            error => {
-              console.log("Post failed with the errors", error.error);
-              if (error.error && error.error.success == false) {
-                this.toster.error(error.error.message);
-              } else {
-                this.toster.error('Oops something went wrong!!');
-              }
-            },
-            () => {
-              console.log("Post Completed");
-            }
-          );
-      }
-      if (this.form_type == 'edit') {
-        this.update()
-      }
-    }
-
-  }
-  edit() {
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/services/' + this.user_data.id + '/edit', { 'headers': headers })
-      .subscribe(data => {
-        console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.serviceName = this.res.name
-        this.description = this.res.description
-        this.alies_name = this.res.alies_name
-        // this.image = this.res.image
-        console.log('UserList', this.res)
-        this.url = false
-        this.userForm()
-      },
-        error => {
-          console.log("failed with the errors", error.error);
-          if (error.error) {
-            this.toster.error(error.error.message);
-          } else {
-            this.toster.error('Something went wrong');
-          }
-        }
-      );
-  }
-  close() {
-    this.modalService.dismissAll()
-    this.form.reset()
-  }
-  update() {
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    let formdata = new FormData()
-    formdata.append('name', this.form.value.name)
-    formdata.append('description', this.form.value.description)
-    formdata.append('alies_name', this.form.value.alies_name)
-    if (this.image_upload != undefined) {
-      formdata.append('image', this.image_upload)
-    }
-
-    formdata.append('_method', 'PATCH')
-    this.http.post<any>(this.baseUrl + 'api/services/' + this.user_data.id, formdata, { 'headers': headers })
-      .subscribe(
-        response => {
-          this.data = response
-          console.log("Data" + this.data);
-          if (this.data.success == true) {
-            this.toster.success(this.data.message);
-          }
-          this.modalService.dismissAll()
-          this.submitted = false;
-          this.getServiceList()
-          this.form_type = ''
-          this.form.reset()
-        },
-        error => {
-          console.log("Post failed with the errors", error.error);
-          if (error.error && error.error.success == false) {
-            this.toster.error(error.error.message);
-          } else {
-            this.toster.error('Oops something went wrong!!');
-          }
-        },
-        () => {
-          console.log("Post Completed");
-        }
-      );
-  }
   open(content: any, type: any, data: any) {
-    this.user_data = data
     if (type == 'edit') {
-      this.router.navigate(['dashboard/add/service/'+this.user_data.id])
+      this.router.navigate(['dashboard/add/service/'+data.id])
     } else {
       this.router.navigate(['dashboard/add/service'])
     }
   }
 
-  selectFile(event: any) { //Angular 11, for stricter type
-    if (!event.target.files[0] || event.target.files[0].length == 0) {
-      this.msg = 'You must select an image';
-      return;
-    }
-
-    var mimeType = event.target.files[0].type;
-
-    if (mimeType.match(/image\/*/) == null) {
-      this.msg = "Only images are supported";
-      return;
-    }
-
-    var reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      this.msg = "";
-      // this.url = reader.result;
-      this.image_upload = event.target.files[0]
-      this.url = true;
-      console.log('URL', this.image_upload)
-    }
-  }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
+  
   onTableDataChange(event: any) {
     this.page = event;
   }

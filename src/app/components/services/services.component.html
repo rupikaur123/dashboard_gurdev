@@ -15,7 +15,7 @@
 
           </div>
           <div class="p-2 flex-shrink-2 bd-highlight"> <a href="javaScript:void(0);" class="btn btn-info"
-              (click)="open(addService,'',null)">Add Service</a></div>
+              (click)="open('addService','',null)">Add Service</a></div>
 
         </div>
         <div class="table-responsive">
@@ -41,7 +41,7 @@
                 <td><p> {{item.description}} </p></td>
                 <td><img [src]="baseUrl+item.image" *ngIf="item.image" width="100" height="100"></td>
                 <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
-                    href="javascript:void(0)" (click)="open(addService,'edit',item)"><i class="fa fa-pencil"></i>
+                    href="javascript:void(0)" (click)="open('addService','edit',item)"><i class="fa fa-pencil"></i>
                     Edit</a>
                   <div class="icon-hover">
                     <i class="fa fa-check" aria-hidden="true" *ngIf="item.status == 1" (click)="changeStatus(item,0)"
@@ -65,83 +65,3 @@
   </div>
 </div>
 
-<ng-template #delmodal let-modal>
-  <div class="modal-header">
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <h3>Are you sure you want to delete ?</h3>
-  </div>
-  <div class="modal-footer">
-    <a href="javaScript:void(0);" class="btn btn-info" (click)="modal.close('Save click')">Yes</a>
-    <a href="javaScript:void(0);" class="btn btn-info" (click)="modal.close('Save click')">No</a>
-  </div>
-</ng-template>
-
-<ng-template #addService let-modal>
-  <div class="modal-header">
-    <strong class="modal-title" id="modal-basic-title" *ngIf="form_type!='edit'">Create Service</strong>
-    <strong class="modal-title" id="modal-basic-title" *ngIf="form_type=='edit'">Update Service</strong>
-    <button type="button" class="close" aria-label="Close" (click)="close()">
-      <span aria-hidden="true">×</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label>Service Name</label>
-        <input type="text" formControlName="name" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" />
-        <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
-          <div *ngIf="f['name'].errors['required']">Service Name is required</div>
-          <div *ngIf="f['name'].errors['minlength']">
-            Service Name must be at least 4 characters
-          </div>
-
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Alies Name</label>
-        <input type="text" formControlName="alies_name" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['alies_name'].errors }" />
-        <div *ngIf="submitted && f['alies_name'].errors" class="invalid-feedback">
-          <div *ngIf="f['alies_name'].errors['required']">Alies Name is required</div>
-          <div *ngIf="f['alies_name'].errors['minlength']">
-            Alies Name must be at least 4 characters
-          </div>
-
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea formControlName="description" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"> </textarea>
-        <div *ngIf="submitted && f['description'].errors" class="invalid-feedback">
-          <div *ngIf="f['description'].errors['required']">Description is required</div>
-          <div *ngIf="f['description'].errors['minlength']">
-            Description must be at least 10 characters
-          </div>
-        </div>
-      </div>
-      <div *ngIf="form_type=='edit' && user_data != null && url != true">
-        <img [src]="baseUrl+user_data.image" *ngIf="user_data.image" width="200" height="200">
-      </div>
-      <div class="form-group">
-        <label>Image</label>
-        <input type="file" (change)="selectFile($event)" formControlName="image" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['image'].errors }">
-
-
-        <div *ngIf="submitted && form_type != 'edit' && f['image'].errors" class="invalid-feedback">
-          <div *ngIf="f['image'].errors['required']">Plesae choose the image.</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary btn-block" *ngIf="form_type != 'edit'">Create</button>
-        <button class="btn btn-primary btn-block" *ngIf="form_type == 'edit'">Update</button>
-      </div>
-    </form>
-  </div>
-</ng-template>

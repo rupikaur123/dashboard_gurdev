@@ -9,7 +9,7 @@
           <h3 class="mb-0" *ngIf="form_type!='edit'">Create Service</h3>
           <h3 class="mb-0" *ngIf="form_type=='edit'">Update Service</h3>
         </div>
-       <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label>Service Name</label>
             <input type="text" formControlName="name" class="form-control"
@@ -19,7 +19,7 @@
               <div *ngIf="f['name'].errors['minlength']">
                 Service Name must be at least 4 characters
               </div>
-    
+
             </div>
           </div>
           <div class="form-group">
@@ -31,7 +31,7 @@
               <div *ngIf="f['alies_name'].errors['minlength']">
                 Alies Name must be at least 4 characters
               </div>
-    
+
             </div>
           </div>
           <div class="form-group">
@@ -55,8 +55,8 @@
             <label>Image</label>
             <input type="file" (change)="selectFile($event,'image')" formControlName="image" class="form-control"
               [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['image'].errors }">
-    
-    
+
+
             <div *ngIf="submitted && form_type != 'edit' && f['image'].errors" class="invalid-feedback">
               <div *ngIf="f['image'].errors['required']">Plesae choose the image.</div>
             </div>
@@ -69,8 +69,8 @@
             <label>Banner Image</label>
             <input type="file" (change)="selectFile($event,'banner')" formControlName="banner_img" class="form-control"
               [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['banner_img'].errors }">
-    
-    
+
+
             <div *ngIf="submitted && form_type != 'edit' && f['banner_img'].errors" class="invalid-feedback">
               <div *ngIf="f['banner_img'].errors['required']">Plesae choose the banner image.</div>
             </div>
@@ -86,6 +86,3 @@
     </div>
   </div>
 </div>
-
- 
-
