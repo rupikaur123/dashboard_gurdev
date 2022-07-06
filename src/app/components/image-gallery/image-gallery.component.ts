@@ -126,11 +126,11 @@ export class ImageGalleryComponent implements OnInit {
 
 getGalleryList() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/gallery_list', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/gallery_list?rows=10', { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
-        this.list = this.res
+        this.list = this.res.data
         console.log('list', this.list)
       },
         error => {
@@ -174,12 +174,12 @@ getGalleryList() {
     this.tableSize = event.target.value;
     this.page = 1;
   }
-  changeStatus(item) {
+  changeStatus(item,status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
     let formdata = new FormData()
     formdata.append('id', item.id)
-    formdata.append('status', item.status)
+    formdata.append('status', status)
     this.http.post<any>(this.baseUrl + 'api/change_status_gallery', formdata, { 'headers': headers })
       .subscribe(
         response => {

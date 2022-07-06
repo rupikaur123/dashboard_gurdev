@@ -312,12 +312,12 @@ export class LatestNewsComponent implements OnInit {
     this.tableSize = event.target.value;
     this.page = 1;
   }
-  changeStatus(item) {
+  changeStatus(item,status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
     let formdata = new FormData()
     formdata.append('id', item.id)
-    formdata.append('status', item.status)
+    formdata.append('status',status)
     this.http.post<any>(this.baseUrl + 'api/news_status', formdata, { 'headers': headers })
       .subscribe(
         response => {

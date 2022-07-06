@@ -28,7 +28,7 @@
                 <th scope="col">Title</th>
                 <th scope="col">Content</th>
                 <th scope="col">Image</th>
-               
+
                 <th scope="col">Actions</th>
               </tr>
             </thead>
@@ -41,7 +41,9 @@
                 }; let i = index">
                 <td>{{i+1}}</td>
                 <td>{{item.title}} </td>
-                <td>{{item.content}} </td>
+                <td>
+                  <p>{{item.content}} </p>
+                </td>
                 <td><img [src]="baseUrl+item.image" *ngIf="item.image" width="100" height="100"></td>
                 <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
                     href="javascript:void(0)" (click)="open(addService,'edit',item)"><i class="fa fa-pencil"></i>
@@ -93,9 +95,9 @@
         <div *ngIf="submitted && f['title'].errors" class="invalid-feedback">
           <div *ngIf="f['title'].errors['required']">Title is required</div>
           <div *ngIf="f['title'].errors['minlength']">
-           Title must be at least 4 characters
+            Title must be at least 4 characters
           </div>
-        
+
         </div>
       </div>
       <div class="form-group">
@@ -125,7 +127,7 @@
           <div *ngIf="f['image'].errors['required']">Plesae choose the image.</div>
         </div>
       </div>
-  
+
       <div class="form-group">
         <button class="btn btn-primary btn-block" *ngIf="form_type!='edit'">Create</button>
         <button class="btn btn-primary btn-block" *ngIf="form_type=='edit'">Update</button>

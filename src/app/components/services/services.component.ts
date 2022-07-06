@@ -21,7 +21,7 @@ export class ServicesComponent implements OnInit {
   image: any = ''
   description: any = ''
   alies_name: any = ''
-  url: any=false; //Angular 11, for stricter type
+  url: any = false; //Angular 11, for stricter type
   msg = "";
   user_data: any
   form: FormGroup = new FormGroup({
@@ -133,7 +133,7 @@ export class ServicesComponent implements OnInit {
               this.modalService.dismissAll()
               this.submitted = false;
               this.form.reset()
-              this.url= false
+              this.url = false
               this.getServiceList()
             },
             error => {
@@ -166,7 +166,7 @@ export class ServicesComponent implements OnInit {
         this.alies_name = this.res.alies_name
         // this.image = this.res.image
         console.log('UserList', this.res)
-        this.url= false
+        this.url = false
         this.userForm()
       },
         error => {
@@ -179,7 +179,7 @@ export class ServicesComponent implements OnInit {
         }
       );
   }
-  close(){
+  close() {
     this.modalService.dismissAll()
     this.form.reset()
   }
@@ -278,12 +278,12 @@ export class ServicesComponent implements OnInit {
     this.page = 1;
   }
 
-  changeStatus(item) {
+  changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
     let formdata = new FormData()
     formdata.append('id', item.id)
-    formdata.append('status', item.status)
+    formdata.append('status', status)
     this.http.post<any>(this.baseUrl + 'api/services_status', formdata, { 'headers': headers })
       .subscribe(
         response => {
