@@ -33,9 +33,10 @@ import { MatInputModule } from '@angular/material/input'
 import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReviewsComponent } from '../reviews/reviews.component'
 import {StaticPagesComponent} from '../static-pages/static-pages.component'
+import { AddServicesComponent} from '../add-services/add-services.component'
 
 @NgModule({
-  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent],
+  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent],
   imports: [
     CommonModule,
     ChartistModule,

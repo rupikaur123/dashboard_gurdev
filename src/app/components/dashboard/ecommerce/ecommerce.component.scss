@@ -1,0 +1,20 @@
+table {
+    table-layout: fixed;
+    // font: larger monospace;
+    border-collapse: collapse;
+  }
+  th:nth-child(1) {
+    width: 20%;
+  }
+  th:nth-child(3) {
+    width: 20%;
+  }
+p {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+  }

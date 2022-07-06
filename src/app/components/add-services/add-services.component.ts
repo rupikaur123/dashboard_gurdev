@@ -4,22 +4,21 @@ import { AbstractControl, FormBuilder, FormGroup, Validators, FormControl } from
 
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { Router} from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router'
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-services',
-  templateUrl: './services.component.html',
-  styleUrls: ['./services.component.scss']
+  templateUrl: './add-services.component.html',
+  styleUrls: ['./add-services.component.scss']
 })
-export class ServicesComponent implements OnInit {
+export class AddServicesComponent implements OnInit {
 
   public focus;
-  userList: any = []
-  searchUser: any
-  closeResult: string = '';
   serviceName: any = ''
   token: any
   image: any = ''
+  banner_img:any
   description: any = ''
   alies_name: any = ''
   url: any = false; //Angular 11, for stricter type
@@ -28,48 +27,39 @@ export class ServicesComponent implements OnInit {
   form: FormGroup = new FormGroup({
     name: new FormControl(''),
     image: new FormControl(''),
+    banner_img: new FormControl(''),
     description: new FormControl(''),
     alies_name: new FormControl('')
 
   });
   submitted = false;
   form_type: any
-  page: number = 1;
-  count: number = 0;
-  tableSize: number = 7;
-  tableSizes: any = [3, 6, 9, 12];
   baseUrl: any = 'http://api.gurdevhospital.co/'
   res: any = ''
   data: any
   image_upload: any
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router:Router) { }
+  bannerimage_upload: any
+  banner_url:any= false
+  id: any
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router, private route: ActivatedRoute) {
+    this.id = this.route.snapshot.params['id']
+    console.log('id', this.id)
+  }
 
   ngOnInit() {
-    this.userList = []
-    this.userForm()
     this.token = localStorage.getItem('token')
-    this.getServiceList()
+    if (this.id != undefined) {
+      this.form_type = 'edit'
+    }
+    if (this.form_type == 'edit') {
+      this.edit()
+    }
+    this.userForm()
+   
+   
   }
 
-  getServiceList() {
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/services', { 'headers': headers })
-      .subscribe(data => {
-        console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.userList = this.res
-        console.log('UserList', this.userList)
-      },
-        error => {
-          console.log("failed with the errors", error.error);
-          if (error.error) {
-            this.toster.error(error.error.message);
-          } else {
-            this.toster.error('Something went wrong');
-          }
-        }
-      );
-  }
+
 
   userForm() {
     this.form = this.formBuilder.group(
@@ -90,6 +80,12 @@ export class ServicesComponent implements OnInit {
         ],
         image: [
           this.image,
+          [
+            Validators.required,
+          ]
+        ],
+        banner_img: [
+          this.banner_img,
           [
             Validators.required,
           ]
@@ -123,6 +119,7 @@ export class ServicesComponent implements OnInit {
         formdata.append('description', this.form.value.description)
         formdata.append('alies_name', this.form.value.alies_name)
         formdata.append('image', this.image_upload)
+        formdata.append('banner_image', this.bannerimage_upload)
         this.http.post<any>(this.baseUrl + 'api/services', formdata, { 'headers': headers })
           .subscribe(
             response => {
@@ -135,7 +132,9 @@ export class ServicesComponent implements OnInit {
               this.submitted = false;
               this.form.reset()
               this.url = false
-              this.getServiceList()
+              this.banner_url = false
+              this.router.navigate(['dashboard/service'])
+
             },
             error => {
               console.log("Post failed with the errors", error.error);
@@ -158,7 +157,7 @@ export class ServicesComponent implements OnInit {
   }
   edit() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/services/' + this.user_data.id + '/edit', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/services/' + this.id + '/edit', { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
@@ -180,9 +179,37 @@ export class ServicesComponent implements OnInit {
         }
       );
   }
-  close() {
-    this.modalService.dismissAll()
-    this.form.reset()
+  public config: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '15rem',
+    minHeight: '5rem',
+    placeholder: 'Enter text here...',
+    translate: 'no',
+    customClasses: [
+      {
+        name: "quote",
+        class: "quote",
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: "titleText",
+        class: "titleText",
+        tag: "h1",
+      },
+    ]
+  }
+
+  public editorConfig = {
+    editable: true,
+    spellcheck: false,
+    height: '10rem',
+    minHeight: '5rem',
+    placeholder: 'Type something. Test the Editor... ヽ(^。^)丿',
+    translate: 'no'
   }
   update() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
@@ -192,10 +219,12 @@ export class ServicesComponent implements OnInit {
     formdata.append('alies_name', this.form.value.alies_name)
     if (this.image_upload != undefined) {
       formdata.append('image', this.image_upload)
+    } if(this.bannerimage_upload != undefined){
+      formdata.append('banner_image', this.bannerimage_upload)
     }
 
     formdata.append('_method', 'PATCH')
-    this.http.post<any>(this.baseUrl + 'api/services/' + this.user_data.id, formdata, { 'headers': headers })
+    this.http.post<any>(this.baseUrl + 'api/services/' + this.id, formdata, { 'headers': headers })
       .subscribe(
         response => {
           this.data = response
@@ -205,9 +234,11 @@ export class ServicesComponent implements OnInit {
           }
           this.modalService.dismissAll()
           this.submitted = false;
-          this.getServiceList()
           this.form_type = ''
           this.form.reset()
+          this.url = false
+          this.banner_url = false
+          this.router.navigate(['dashboard/service'])
         },
         error => {
           console.log("Post failed with the errors", error.error);
@@ -222,16 +253,9 @@ export class ServicesComponent implements OnInit {
         }
       );
   }
-  open(content: any, type: any, data: any) {
-    this.user_data = data
-    if (type == 'edit') {
-      this.router.navigate(['dashboard/add/service/'+this.user_data.id])
-    } else {
-      this.router.navigate(['dashboard/add/service'])
-    }
-  }
 
-  selectFile(event: any) { //Angular 11, for stricter type
+
+  selectFile(event: any,type:any) { //Angular 11, for stricter type
     if (!event.target.files[0] || event.target.files[0].length == 0) {
       this.msg = 'You must select an image';
       return;
@@ -250,56 +274,17 @@ export class ServicesComponent implements OnInit {
     reader.onload = (_event) => {
       this.msg = "";
       // this.url = reader.result;
-      this.image_upload = event.target.files[0]
-      this.url = true;
+    
+      if(type == 'image'){
+        this.image_upload = event.target.files[0]
+        this.url = true;
+      } else if(type == 'banner'){
+        this.bannerimage_upload = event.target.files[0]
+        this.banner_url = true;
+      }
+    
       console.log('URL', this.image_upload)
     }
   }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-  onTableDataChange(event: any) {
-    this.page = event;
-  }
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
-  }
 
-  changeStatus(item, status) {
-    console.log('Item', item)
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    let formdata = new FormData()
-    formdata.append('id', item.id)
-    formdata.append('status', status)
-    this.http.post<any>(this.baseUrl + 'api/services_status', formdata, { 'headers': headers })
-      .subscribe(
-        response => {
-          this.data = response
-          console.log("Data" + this.data);
-          if (this.data.success == true) {
-            this.toster.success(this.data.message);
-          }
-          this.getServiceList()
-        },
-        error => {
-          console.log("Post failed with the errors", error.error);
-          if (error.error && error.error.success == false) {
-            this.toster.error(error.error.message);
-          } else {
-            this.toster.error('Oops something went wrong!!');
-          }
-        },
-        () => {
-          console.log("Post Completed");
-        }
-      );
-
-  }
 }

@@ -12,6 +12,7 @@ import { LatestNewsComponent } from '../latest-news/latest-news.component'
 import { ImageGalleryComponent } from '../image-gallery/image-gallery.component'
 import { ReviewsComponent } from '../reviews/reviews.component'
 import {StaticPagesComponent} from '../static-pages/static-pages.component'
+import { AddServicesComponent} from '../add-services/add-services.component'
 
 
 const routes: Routes = [
@@ -64,6 +65,14 @@ const routes: Routes = [
       {
         path:'static',
         component:StaticPagesComponent
+      },
+      {
+        path:'add/service',
+        component:AddServicesComponent
+      },
+      {
+        path:'add/service/:id',
+        component:AddServicesComponent
       }
     ],
   }
