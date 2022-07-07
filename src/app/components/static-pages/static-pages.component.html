@@ -48,6 +48,11 @@
                 <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
                     href="javascript:void(0)" (click)="open('addService','edit',item)"><i class="fa fa-pencil"></i>
                     Edit</a>
+                    <!-- <div class="icon-hover">
+                      <i class="fa fa-check" aria-hidden="true" *ngIf="item.status == 1" (click)="changeStatus(item,0)" title="Make Inactive"></i>
+                  
+                  <i class="fa fa-times" aria-hidden="true" *ngIf="item.status == 0" (click)="changeStatus(item,1)" title="Make Active"></i>
+                    </div>  -->
                 </td>
               </tr>
 

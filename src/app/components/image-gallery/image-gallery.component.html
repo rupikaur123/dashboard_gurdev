@@ -33,7 +33,7 @@
                 }; let i = index">
                 <td>{{i+1}}</td>
                 <td><img [src]="baseUrl+item.image_path+item.image" *ngIf="item.image" width="100" height="100"></td>
-                <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm"
+                <td class="row"><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm"
                     href="javascript:void(0)" (click)="open(delmodal,'delete',item)"><i class="fa fa-trash" ></i> Delete</a>
                     <div class="icon-hover">
                       <i class="fa fa-check" aria-hidden="true" *ngIf="item.status == 1" (click)="changeStatus(item,0)" title="Make Inactive"></i>

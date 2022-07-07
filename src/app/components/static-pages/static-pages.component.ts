@@ -74,5 +74,34 @@ export class StaticPagesComponent implements OnInit {
     this.page = 1;
   }
 
+  changeStatus(item,status) {
+    console.log('Item', item)
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    let formdata = new FormData()
+    formdata.append('id', item.id)
+    formdata.append('status', status)
+    this.http.post<any>(this.baseUrl + 'api/review_status', formdata, { 'headers': headers })
+      .subscribe(
+        response => {
+          this.data = response
+          console.log("Data" + this.data);
+          if (this.data.success == true) {
+            this.toster.success(this.data.message);
+          }
+          this.getReviewsList()
+        },
+        error => {
+          console.log("Post failed with the errors", error.error);
+          if (error.error && error.error.success == false) {
+            this.toster.error(error.error.message);
+          } else {
+            this.toster.error('Oops something went wrong!!');
+          }
+        },
+        () => {
+          console.log("Post Completed");
+        }
+      );
 
+  }
 }
