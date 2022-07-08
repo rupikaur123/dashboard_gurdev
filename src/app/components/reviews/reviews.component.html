@@ -45,13 +45,12 @@
                     href="javascript:void(0)" (click)="open(addService,'edit',item)"><i class="fa fa-pencil"></i>
                     Edit</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm"
                     href="javascript:void(0)" (click)="open(delmodal,'',item)"><i class="fa fa-trash"></i> Delete</a>
-                  <div class="icon-hover">
-                    <i class="fa fa-check" aria-hidden="true" *ngIf="item.status == 1" (click)="changeStatus(item,0)"
-                      title="Make Inactive"></i>
-
-                    <i class="fa fa-times" aria-hidden="true" *ngIf="item.status == 0" (click)="changeStatus(item,1)"
-                      title="Make Active"></i>
-                  </div>
+                    <a class="btn btn-success btn-sm"
+                    href="javascript:void(0)"  *ngIf="item.status == 1" (click)="changeStatus(item,0)">
+                    <i class="fa fa-check" title="Make Inactive"></i> Change Status</a>
+                  <a class="btn btn-danger btn-sm"
+                    href="javascript:void(0)"  *ngIf="item.status == 0" (click)="changeStatus(item,1)">
+                    <i class="fa fa-times" title="Make Active"></i> Change Status</a>
                 </td>
               </tr>
 
@@ -93,7 +92,7 @@
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label>Review</label>
+        <strong>Review</strong>
         <textarea type="text" formControlName="review" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['review'].errors }"></textarea>
         <div *ngIf="submitted && f['review'].errors" class="invalid-feedback">
@@ -105,10 +104,10 @@
         </div>
       </div>
       <div *ngIf="form_type=='edit' && news_data != null && url != true">
-        <img [src]="baseUrl+news_data.image" *ngIf="news_data.image" width="200" height="200">
+        <img [src]="baseUrl+news_data.image" *ngIf="news_data.image" width="450" height="200">
       </div>
       <div class="form-group">
-        <label>Image</label>
+        <strong>Image</strong>
         <input type="file" (change)="selectFile($event)" formControlName="image" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['image'].errors }">
 

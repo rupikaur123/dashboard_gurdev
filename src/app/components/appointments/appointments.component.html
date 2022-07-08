@@ -77,9 +77,9 @@
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label>Service Name</label>
+        <strong>Service Name</strong>
         <input type="text" formControlName="apptName" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['apptName'].errors }" />
+          [ngClass]="{ 'is-invalid': submitted && f['apptName'].errors }" readonly />
         <div *ngIf="submitted && f['apptName'].errors" class="invalid-feedback">
           <div *ngIf="f['apptName'].errors['required']">Appointment is required</div>
           <div *ngIf="f['apptName'].errors['minlength']">
@@ -89,60 +89,60 @@
         </div>
       </div>
       <div class="form-group">
-        <label>Appoinment Date</label>
+        <strong>Appoinment Date</strong>
         <input type="text" formControlName="apptDate" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['apptDate'].errors }" />
+          [ngClass]="{ 'is-invalid': submitted && f['apptDate'].errors }" readonly />
         <div *ngIf="submitted && f['apptDate'].errors" class="invalid-feedback">
           <div *ngIf="f['apptDate'].errors['required']">Appointment Date is required</div>
-         
+
 
         </div>
       </div>
       <div class="form-group">
-        <label>Full Name</label>
+        <strong>Full Name</strong>
         <input type="text" formControlName="fullName" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['fullName'].errors }" />
+          [ngClass]="{ 'is-invalid': submitted && f['fullName'].errors }" readonly />
         <div *ngIf="submitted && f['fullName'].errors" class="invalid-feedback">
           <div *ngIf="f['fullName'].errors['required']">Full Name is required</div>
         </div>
       </div>
       <div class="form-group">
-        <label>Email</label>
+        <strong>Email</strong>
         <input type="email" formControlName="email" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
+          [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" readonly />
         <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
           <div *ngIf="f['email'].errors['required']">Email is required</div>
         </div>
       </div>
       <div class="form-group">
-        <label>DOB</label>
+        <strong>DOB</strong>
         <input type="text" formControlName="dob" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }" />
+          [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }" readonly />
         <div *ngIf="submitted && f['dob'].errors" class="invalid-feedback">
           <div *ngIf="f['dob'].errors['required']">DOB is required</div>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Address</label>
+        <strong>Address</strong>
         <input type="text" formControlName="address" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" />
+          [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" readonly />
         <div *ngIf="submitted && f['address'].errors" class="invalid-feedback">
           <div *ngIf="f['address'].errors['required']">Address is required</div>
         </div>
       </div>
       <div class="form-group">
-        <label>Phone No.</label>
+        <strong>Phone No.</strong>
         <input type="text" formControlName="phone_no" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['phone_no'].errors }" />
+          [ngClass]="{ 'is-invalid': submitted && f['phone_no'].errors }" readonly />
         <div *ngIf="submitted && f['phone_no'].errors" class="invalid-feedback">
           <div *ngIf="f['phone_no'].errors['required']">Phone No. is required</div>
         </div>
       </div>
       <div class="form-group">
-        <label>Comment</label>
-        <input type="text" formControlName="comment" class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['comment'].errors }" />
+        <strong>Comment</strong>
+        <textarea formControlName="comment" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['comment'].errors }" readonly></textarea>
         <div *ngIf="submitted && f['comment'].errors" class="invalid-feedback">
           <div *ngIf="f['comment'].errors['required']">Comment is required</div>
         </div>
