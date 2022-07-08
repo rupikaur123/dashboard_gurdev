@@ -5,7 +5,6 @@ import { AbstractControl, FormBuilder, FormGroup, Validators, FormControl } from
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router'
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-services',
