@@ -36,9 +36,11 @@ import {StaticPagesComponent} from '../static-pages/static-pages.component'
 import { AddServicesComponent} from '../add-services/add-services.component'
 import {AddNewsComponent} from '../add-news/add-news.component'
 import {AddStaticPagesComponent} from '../add-static-page/add-static-page.component'
+import {AddDoctorComponent} from'../add-doctor/add-doctor.component'
+import {DoctorComponent} from '../doctor/doctor.component'
 
 @NgModule({
-  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent,AddNewsComponent,AddStaticPagesComponent],
+  declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent,AddNewsComponent,AddStaticPagesComponent,AddDoctorComponent,DoctorComponent],
   imports: [
     CommonModule,
     ChartistModule,

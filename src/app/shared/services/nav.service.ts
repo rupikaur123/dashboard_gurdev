@@ -87,17 +87,14 @@ export class NavService implements OnDestroy {
 		// 		{ path: '/dashboard/ecommerce', title: 'Dashboard',icon: 'home',type: 'link' }
 		// 	]
 		// },
-		{ path: '/dashboard/ecommerce', title: 'Dashboard',icon: 'home',type: 'link' },
+		{ path: '/dashboard/ecommerce', title: 'Dashboard', icon: 'home', type: 'link' },
 		{ path: '/dashboard/service', title: 'Services', icon: 'edit', type: 'link' },
 		{ path: '/dashboard/appointments', title: 'Appointments', icon: 'edit', type: 'link' },
-			// { path: '/dashboard/about', title: 'About Us', icon: 'edit', type: 'link' },
-		// { path: '/dashboard/privacy', title: 'Privacy Policy', icon: 'edit', type: 'link' },
-		// { path: '/dashboard/terms-condition', title: 'Terms & Conditions', icon: 'edit', type: 'link' },
-		// { path: '/dashboard/contact-us', title: 'Contact Us', icon: 'edit', type: 'link' },
 		{ path: '/dashboard/latest-news', title: 'Latest News', icon: 'edit', type: 'link' },
 		{ path: '/dashboard/gallery', title: 'Gallery', icon: 'edit', type: 'link' },
 		{ path: '/dashboard/reviews', title: 'Reviews', icon: 'edit', type: 'link' },
 		{ path: '/dashboard/static', title: 'Static Pages', icon: 'edit', type: 'link' },
+		{ path: '/dashboard/doctor', title: 'Doctor', icon: 'edit', type: 'link' },
 	];
 	// Array
 	items = new BehaviorSubject<Menu[]>(this.MENUITEMS);

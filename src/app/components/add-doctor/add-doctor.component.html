@@ -1,0 +1,146 @@
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Table -->
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <h3 class="mb-0" *ngIf="form_type!='edit'">Create Doctor</h3>
+          <h3 class="mb-0" *ngIf="form_type=='edit'">Update Doctor</h3>
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body">
+                <label><strong>First Name</strong></label>
+                <input type="text" formControlName="fname" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['fname'].errors }" />
+                <div *ngIf="submitted && f['fname'].errors" class="invalid-feedback">
+                  <div *ngIf="f['fname'].errors['required']">First Name is required</div>
+                  <div *ngIf="f['fname'].errors['minlength']">
+                    First Name must be at least 4 characters
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body">
+                <label><strong>Last Name</strong></label>
+                <input type="text" formControlName="lname" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['lname'].errors }" />
+                <div *ngIf="submitted && f['lname'].errors" class="invalid-feedback">
+                  <div *ngIf="f['lname'].errors['required']">Last Name is required</div>
+                  <div *ngIf="f['lname'].errors['minlength']">
+                    Last Name must be at least 4 characters
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body">
+                <label><strong>Email</strong></label>
+                <input *ngIf="form_type!='edit'" type="email" formControlName="email" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
+                <input *ngIf="form_type=='edit'" type="email" formControlName="email" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" readonly />
+
+                <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                  <div *ngIf="f['email'].errors['required']">Email is required</div>
+                  <div *ngIf="f['email'].errors['email']">Please enter a valid email address</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body">
+                <label><strong>Profession</strong></label>
+                <input type="text" formControlName="profession" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['profession'].errors }" />
+                <div *ngIf="submitted && f['profession'].errors" class="invalid-feedback">
+                  <div *ngIf="f['profession'].errors['required']">Profession is required</div>
+                  <div *ngIf="f['profession'].errors['minlength']">
+                    Profession must be at least 4 characters
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body">
+                <label><strong>Qualification</strong></label>
+                <input type="text" formControlName="quali" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['quali'].errors }" />
+                <div *ngIf="submitted && f['quali'].errors" class="invalid-feedback">
+                  <div *ngIf="f['quali'].errors['required']">Qualification is required</div>
+                  <div *ngIf="f['quali'].errors['minlength']">
+                    Qualification must be at least 4 characters
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body">
+                <label><strong>Phone No.</strong></label>
+                <input type="text" formControlName="phone" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }" />
+                <div *ngIf="submitted && f['phone'].errors" class="invalid-feedback">
+                  <div *ngIf="f['phone'].errors['required']">Phone No. is required</div>
+                  <div *ngIf="f['phone'].errors['pattern']"> Please enter valid mumber</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div *ngIf="form_type=='edit' && res != null && url != true">
+            <div class="card">
+              <div class="card-body">
+                <img [src]="baseUrl+res.image" *ngIf="res.image" width="1100" height="500">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body">
+                <label><strong>Image</strong></label>
+                <input type="file" (change)="selectFile($event,'image')" formControlName="image" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['image'].errors }">
+                <div *ngIf="submitted && form_type != 'edit' && f['image'].errors" class="invalid-feedback">
+                  <div *ngIf="f['image'].errors['required']">Plesae choose the image.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body">
+                <button class="btn btn-primary btn-block" *ngIf="form_type != 'edit'">Create</button>
+                <button class="btn btn-primary btn-block" *ngIf="form_type == 'edit'">Update</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

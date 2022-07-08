@@ -11,10 +11,12 @@ import { ContactUsComponent } from '../contact-us/contact-us.component'
 import { LatestNewsComponent } from '../latest-news/latest-news.component'
 import { ImageGalleryComponent } from '../image-gallery/image-gallery.component'
 import { ReviewsComponent } from '../reviews/reviews.component'
-import {StaticPagesComponent} from '../static-pages/static-pages.component'
-import { AddServicesComponent} from '../add-services/add-services.component'
-import {AddNewsComponent} from '../add-news/add-news.component'
-import {AddStaticPagesComponent} from '../add-static-page/add-static-page.component'
+import { StaticPagesComponent } from '../static-pages/static-pages.component'
+import { AddServicesComponent } from '../add-services/add-services.component'
+import { AddNewsComponent } from '../add-news/add-news.component'
+import { AddStaticPagesComponent } from '../add-static-page/add-static-page.component'
+import { AddDoctorComponent } from '../add-doctor/add-doctor.component'
+import { DoctorComponent } from '../doctor/doctor.component'
 
 
 const routes: Routes = [
@@ -65,30 +67,41 @@ const routes: Routes = [
         component: ReviewsComponent
       },
       {
-        path:'static',
-        component:StaticPagesComponent
+        path: 'static',
+        component: StaticPagesComponent
       },
       {
-        path:'add/service',
-        component:AddServicesComponent
+        path: 'add/service',
+        component: AddServicesComponent
       },
       {
-        path:'add/service/:id',
-        component:AddServicesComponent
+        path: 'add/service/:id',
+        component: AddServicesComponent
       },
       {
-        path:'add/news',
-        component:AddNewsComponent
+        path: 'add/news',
+        component: AddNewsComponent
       },
       {
-        path:'add/news/:id',
-        component:AddNewsComponent
-      },{
-        path:'add/page',
-      component:AddStaticPagesComponent  
-      },{
-        path:'add/page/:id',
-      component:AddStaticPagesComponent  
+        path: 'add/news/:id',
+        component: AddNewsComponent
+      }, {
+        path: 'add/page',
+        component: AddStaticPagesComponent
+      }, {
+        path: 'add/page/:id',
+        component: AddStaticPagesComponent
+      },
+      {
+        path: 'add/doctor',
+        component: AddDoctorComponent
+      },
+      {
+        path: 'add/doctor/:id',
+        component: AddDoctorComponent
+      }, {
+        path: 'doctor',
+        component: DoctorComponent
       }
     ],
   }
