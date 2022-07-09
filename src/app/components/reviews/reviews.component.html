@@ -47,10 +47,10 @@
                     href="javascript:void(0)" (click)="open(delmodal,'',item)"><i class="fa fa-trash"></i> Delete</a>
                     <a class="btn btn-success btn-sm"
                     href="javascript:void(0)"  *ngIf="item.status == 1" (click)="changeStatus(item,0)">
-                    <i class="fa fa-check" title="Make Inactive"></i> Change Status</a>
+                    <i class="fa fa-check" title="Make Inactive"></i></a>
                   <a class="btn btn-danger btn-sm"
                     href="javascript:void(0)"  *ngIf="item.status == 0" (click)="changeStatus(item,1)">
-                    <i class="fa fa-times" title="Make Active"></i> Change Status</a>
+                    <i class="fa fa-times" title="Make Active"></i></a>
                 </td>
               </tr>
 
@@ -104,7 +104,7 @@
         </div>
       </div>
       <div *ngIf="form_type=='edit' && news_data != null && url != true">
-        <img [src]="baseUrl+news_data.image" *ngIf="news_data.image" width="450" height="200">
+        <img [src]="baseUrl+news_data.image" *ngIf="news_data.image" width="200" height="150">
       </div>
       <div class="form-group">
         <strong>Image</strong>
