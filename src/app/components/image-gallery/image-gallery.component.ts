@@ -3,6 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../shared/services/firebase/auth.service';
 
 
 
@@ -17,6 +18,7 @@ export class ImageGalleryComponent implements OnInit {
   list: any = []
   searchUser: any
   closeResult: string = '';
+  public showLoader: boolean = false;
   image: any = ''
   image_upload: any
   url: any; //Angular 11, for stricter type
@@ -35,7 +37,7 @@ export class ImageGalleryComponent implements OnInit {
   res:any
   gallery_data:any
   public editorValue: string = '';
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder,public http: HttpClient, public toster: ToastrService) { }
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder,public http: HttpClient, public toster: ToastrService,public authService: AuthService) { }
   selectFile(event: any) { //Angular 11, for stricter type
     if (!event.target.files[0] || event.target.files[0].length == 0) {
       this.msg = 'You must select an image';
@@ -56,9 +58,55 @@ export class ImageGalleryComponent implements OnInit {
       this.msg = "";
       this.url = reader.result;
       this.image_upload = event.target.files[0]
+      if(this.image_upload != '' || this.image_upload != undefined){
+        console.log('Date',this.form.value)
+        this.submitted = true;
+        if (this.form.invalid) {
+          return;
+        }
+    
+        else {
+          this.authService.showLoader = true
+            const headers = { 'Authorization': 'Bearer ' + this.token }
+            let formdata = new FormData()
+            formdata.append('image', this.image_upload)
+            
+            this.http.post<any>(this.baseUrl + 'api/add_gallery_img', formdata, { 'headers': headers })
+              .subscribe(
+                response => {
+                  this.authService.showLoader = false
+                  this.data = response
+                  console.log("Data" + this.data);
+                  if (this.data.success == true) {
+                    this.toster.success(this.data.message);
+                  }
+                  this.modalService.dismissAll()
+                  this.submitted = false;
+                  this.form.reset()
+                  this.getGalleryList()
+                },
+                error => {
+                  this.authService.showLoader = false
+                  console.log("Post failed with the errors", error.error);
+                  if (error.error && error.error.success == false) {
+                    this.toster.error(error.error.message);
+                  } else {
+                    this.toster.error('Oops something went wrong!!');
+                  }
+                },
+                () => {
+                  console.log("Post Completed");
+                }
+              );
+        
+        }
+    
+      }
     }
+   
   }
   ngOnInit() {
+    this.authService.showLoader = true
     this.token = localStorage.getItem('token')
     this.list = []
     this.listForm()
@@ -83,44 +131,44 @@ export class ImageGalleryComponent implements OnInit {
     return this.form.controls;
   }
   onSubmit(): void {
-    console.log('Date',this.form.value)
-    this.submitted = true;
-    if (this.form.invalid) {
-      return;
-    }
+    // console.log('Date',this.form.value)
+    // this.submitted = true;
+    // if (this.form.invalid) {
+    //   return;
+    // }
 
-    else {
+    // else {
    
-        const headers = { 'Authorization': 'Bearer ' + this.token }
-        let formdata = new FormData()
-        formdata.append('image', this.image_upload)
-        this.http.post<any>(this.baseUrl + 'api/add_gallery_img', formdata, { 'headers': headers })
-          .subscribe(
-            response => {
-              this.data = response
-              console.log("Data" + this.data);
-              if (this.data.success == true) {
-                this.toster.success(this.data.message);
-              }
-              this.modalService.dismissAll()
-              this.submitted = false;
-              this.form.reset()
-              this.getGalleryList()
-            },
-            error => {
-              console.log("Post failed with the errors", error.error);
-              if (error.error && error.error.success == false) {
-                this.toster.error(error.error.message);
-              } else {
-                this.toster.error('Oops something went wrong!!');
-              }
-            },
-            () => {
-              console.log("Post Completed");
-            }
-          );
+    //     const headers = { 'Authorization': 'Bearer ' + this.token }
+    //     let formdata = new FormData()
+    //     formdata.append('image', this.image_upload)
+    //     this.http.post<any>(this.baseUrl + 'api/add_gallery_img', formdata, { 'headers': headers })
+    //       .subscribe(
+    //         response => {
+    //           this.data = response
+    //           console.log("Data" + this.data);
+    //           if (this.data.success == true) {
+    //             this.toster.success(this.data.message);
+    //           }
+    //           this.modalService.dismissAll()
+    //           this.submitted = false;
+    //           this.form.reset()
+    //           this.getGalleryList()
+    //         },
+    //         error => {
+    //           console.log("Post failed with the errors", error.error);
+    //           if (error.error && error.error.success == false) {
+    //             this.toster.error(error.error.message);
+    //           } else {
+    //             this.toster.error('Oops something went wrong!!');
+    //           }
+    //         },
+    //         () => {
+    //           console.log("Post Completed");
+    //         }
+    //       );
     
-    }
+    // }
 
   }
 
@@ -130,7 +178,7 @@ getGalleryList() {
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
-        this.list = this.res.data
+        this.list = this.res
         console.log('list', this.list)
       },
         error => {

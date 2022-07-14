@@ -24,9 +24,9 @@
               <tr>
                 <th scope="col">S.no</th>
                 <th scope="col">Name</th>
-                <th scope="col">Email</th>
+                <!-- <th scope="col">Email</th> -->
                 <th scope="col">Image</th>
-                <th scope="col">Phone No</th>
+                <!-- <th scope="col">Phone No</th> -->
                 <th scope="col">Profession</th>
                 <th scope="col">Qualification</th>
                 <th scope="col">Actions</th>
@@ -41,9 +41,9 @@
                 }; let i = index">
                 <td>{{i+1}}</td>
                 <td>{{item.first_name}} </td>
-                <td><p> {{item.email}} </p></td>
-                <td><img [src]="baseUrl+item.image" *ngIf="item.image" width="100" height="100"></td>
-                <td><p> {{item.phone_number}} </p></td>
+                <!-- <td><p> {{item.email}} </p></td> -->
+                <td><img [src]="item.image" *ngIf="item.image" width="100" height="100"></td>
+                <!-- <td><p> {{item.phone_number}} </p></td> -->
                 <td><p> {{item.profession}} </p></td>
                 <td>{{item.qualification}}</td>
                 <td class="row">

@@ -27,11 +27,11 @@ export class AddDoctorComponent implements OnInit {
   form: FormGroup = new FormGroup({
     fname: new FormControl(''),
     lname: new FormControl(''),
-    email: new FormControl(''),
+    // email: new FormControl(''),
     profession: new FormControl(''),
     image: new FormControl(''),
     quali: new FormControl(''),
-    phone: new FormControl(''),
+    // phone: new FormControl(''),
 
 
   });
@@ -102,19 +102,19 @@ export class AddDoctorComponent implements OnInit {
             Validators.required,
           ]
         ],
-        phone: [
-          this.phone,
-          [
-            Validators.required,
-            Validators.pattern(MOBILE_PATTERN),
-          ]
-        ],
-        email: [
-          this.email,
-          [
-            Validators.required,Validators.email
-          ]
-        ]
+        // phone: [
+        //   this.phone,
+        //   [
+        //     Validators.required,
+        //     Validators.pattern(MOBILE_PATTERN),
+        //   ]
+        // ],
+        // email: [
+        //   this.email,
+        //   [
+        //     Validators.required,Validators.email
+        //   ]
+        // ]
       }
     );
   }
@@ -135,10 +135,10 @@ export class AddDoctorComponent implements OnInit {
         let formdata = new FormData()
         formdata.append('first_name', this.form.value.fname)
         formdata.append('last_name', this.form.value.lname)
-        formdata.append('email', this.form.value.email)
+        // formdata.append('email', this.form.value.email)
         formdata.append('image', this.image_upload)
         formdata.append('profession', this.form.value.profession)
-        formdata.append('phone_number', this.form.value.phone)
+        // formdata.append('phone_number', this.form.value.phone)
         formdata.append('qualification', this.form.value.quali)
         this.http.post<any>(this.baseUrl + 'api/doctors', formdata, { 'headers': headers })
           .subscribe(
@@ -182,10 +182,10 @@ export class AddDoctorComponent implements OnInit {
         this.res = data.data;
         this.fname = this.res.first_name
         this.lname = this.res.last_name
-        this.email = this.res.email
+        // this.email = this.res.email
         this.profession = this.res.profession
         this.quali = this.res.qualification
-        this.phone = this.res.phone_number.replace('+91','')
+        // this.phone = this.res.phone_number.replace('+91','')
         console.log('DoctorList', this.res)
         this.url = false
         this.userForm()
@@ -206,9 +206,9 @@ export class AddDoctorComponent implements OnInit {
     let formdata = new FormData()
     formdata.append('first_name', this.form.value.fname)
     formdata.append('last_name', this.form.value.lname)
-    formdata.append('email', this.form.value.email)
+    // formdata.append('email', this.form.value.email)
     formdata.append('profession', this.form.value.profession)
-    formdata.append('phone_number', this.form.value.phone)
+    // formdata.append('phone_number', this.form.value.phone)
     formdata.append('qualification', this.form.value.quali)
     if (this.image_upload != undefined) {
       formdata.append('image', this.image_upload)
