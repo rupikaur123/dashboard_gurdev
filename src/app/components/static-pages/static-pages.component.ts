@@ -18,33 +18,37 @@ import { Router } from '@angular/router';
 export class StaticPagesComponent implements OnInit {
 
   public focus;
-  searchUser:any
+  searchUser: any
   newsList: any = []
   baseUrl: any = 'http://api.gurdevhospital.co/'
   token: any = ''
   data: any
-  page: number = 1;
-  count: number = 0;
-  tableSize: number = 7;
-  tableSizes: any = [3, 6, 9, 12];
   res: any
- 
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService,private router:Router) {
+  page = {
+    limit: 10,
+    count: 0,
+    offset: 0,
+    pageSize: 10
+  };
+
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router) {
   }
-  
+
   ngOnInit() {
     this.token = localStorage.getItem('token')
-    this.getReviewsList()
+    this.getReviewsList(this.page.offset + 1)
   }
- 
- 
-  getReviewsList() {
+
+
+  getReviewsList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/static_pages', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/static_pages?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.newsList = this.res
+        this.res = data;
+        this.newsList = this.res.data
+        this.page.count = this.res.meta.pagination.total
+        this.page.limit = this.res.meta.pagination.per_page
         console.log('newsList', this.newsList)
       },
         error => {
@@ -59,22 +63,17 @@ export class StaticPagesComponent implements OnInit {
   }
   open(content: any, type: any, data: any) {
     if (type == 'edit') {
-    this.router.navigate(['dashboard/add/page/'+data.id])
+      this.router.navigate(['dashboard/add/page/' + data.id])
     } else {
       this.router.navigate(['dashboard/add/page'])
     }
-  
+
   }
 
-  onTableDataChange(event: any) {
-    this.page = event;
+  updateFilter(event: any) {
+    console.log('event', event.target.value)
   }
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
-  }
-
-  changeStatus(item,status) {
+  changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
     let formdata = new FormData()
@@ -88,7 +87,7 @@ export class StaticPagesComponent implements OnInit {
           if (this.data.success == true) {
             this.toster.success(this.data.message);
           }
-          this.getReviewsList()
+          this.getReviewsList(this.page.offset + 1)
         },
         error => {
           console.log("Post failed with the errors", error.error);
@@ -103,5 +102,9 @@ export class StaticPagesComponent implements OnInit {
         }
       );
 
+  }
+  datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
+    this.page.offset = pageInfo.offset
+    this.getReviewsList(this.page.offset + 1)
   }
 }

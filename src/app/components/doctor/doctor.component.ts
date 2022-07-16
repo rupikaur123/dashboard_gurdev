@@ -22,29 +22,33 @@ export class DoctorComponent implements OnInit {
   url: any = false; //Angular 11, for stricter type
   msg = "";
   submitted = false;
-  page: number = 1;
-  count: number = 0;
-  tableSize: number = 7;
-  tableSizes: any = [3, 6, 9, 12];
   baseUrl: any = 'http://api.gurdevhospital.co/'
   res: any = ''
   data: any
   image_upload: any
+  page = {
+    limit: 10,
+    count: 0,
+    offset: 0,
+    pageSize: 10
+  };
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router) { }
 
   ngOnInit() {
     this.doctorList = []
     this.token = localStorage.getItem('token')
-    this.getDoctorList()
+    this.getDoctorList(this.page.offset + 1)
   }
 
-  getDoctorList() {
+  getDoctorList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/doctors', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/doctors?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.doctorList = this.res
+        this.res = data;
+        this.doctorList = this.res.data
+        this.page.count = this.res.meta.pagination.total
+        this.page.limit = this.res.meta.pagination.per_page
         console.log('doctorList', this.doctorList)
       },
         error => {
@@ -57,7 +61,13 @@ export class DoctorComponent implements OnInit {
         }
       );
   }
-
+  updateFilter(event: any) {
+    console.log('event', event.target.value)
+  }
+  datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
+    this.page.offset = pageInfo.offset
+    this.getDoctorList(this.page.offset + 1)
+  }
   open(content: any, type: any, data: any) {
     if (type == 'edit') {
       this.router.navigate(['dashboard/add/doctor/' + data.id])
@@ -65,16 +75,6 @@ export class DoctorComponent implements OnInit {
       this.router.navigate(['dashboard/add/doctor'])
     }
   }
-
-
-  onTableDataChange(event: any) {
-    this.page = event;
-  }
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
-  }
-
   changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
@@ -89,7 +89,7 @@ export class DoctorComponent implements OnInit {
           if (this.data.success == true) {
             this.toster.success(this.data.message);
           }
-          this.getDoctorList()
+          this.getDoctorList(this.page.offset + 1)
         },
         error => {
           console.log("Post failed with the errors", error.error);

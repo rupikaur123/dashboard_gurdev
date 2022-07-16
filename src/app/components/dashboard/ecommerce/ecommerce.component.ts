@@ -12,24 +12,34 @@ export class EcommerceComponent implements OnInit {
   res: any
   baseUrl: any = 'http://api.gurdevhospital.co/'
   token: any = ''
-  searchUser: any
-  page: number = 1;
-  count: number = 0;
-  tableSize: number = 7;
-  tableSizes: any = [3, 6, 9, 12];
+  page = {
+    limit: 10,
+    count: 0,
+    offset: 0,
+    pageSize: 10
+  };
   constructor(public http: HttpClient, public toster: ToastrService) { }
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token')
-    this.getDashboardList()
+    this.getDashboardList(this.page.offset + 1)
   }
-  getDashboardList() {
+  updateFilter(event: any) {
+    console.log('event', event.target.value)
+  }
+  datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
+    this.page.offset = pageInfo.offset
+    this.getDashboardList(this.page.offset + 1)
+  }
+  getDashboardList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/dashboard', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/dashboard?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.dashboardList = this.res
+        this.res = data;
+        this.dashboardList = this.res.data
+        this.page.count = this.dashboardList.latest_news.length
+        this.page.limit = 10
         console.log('dashboardList', this.dashboardList)
       },
         error => {
@@ -41,12 +51,5 @@ export class EcommerceComponent implements OnInit {
           }
         }
       );
-  }
-  onTableDataChange(event: any) {
-    this.page = event;
-  }
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
   }
 }
