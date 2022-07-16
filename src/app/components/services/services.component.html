@@ -1,67 +1,63 @@
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
-<!-- Page content -->
-<div class="container-fluid mt--7">
-  <!-- Table -->
+<div class="container-fluid">
   <div class="row">
-    <div class="col">
-      <div class="card shadow">
-        <div class="card-header border-0">
-          <h3 class="mb-0">Service List</h3>
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Service List</h5>
         </div>
-        <div class="d-flex bd-highlight mb-3">
-          <div class="p-2 w-100 bd-highlight">
-
-            <input matInput type="search" placeholder="Search" class="search-input" [(ngModel)]="searchUser">
-
+        <div class="card-body custom-datatable">
+          <div class="d-flex bd-highlight mb-3">
+            <div class="p-2 w-100 bd-highlight">
+              <input type="text"  placeholder="Type to filter the name column..." (keyup)="updateFilter($event)"  />
+            </div>
+            <div class="p-2 flex-shrink-2 bd-highlight"> <a href="javaScript:void(0);" class="btn btn-info"
+                (click)="open('addService','',null)">Add Service</a></div>
           </div>
-          <div class="p-2 flex-shrink-2 bd-highlight"> <a href="javaScript:void(0);" class="btn btn-info"
-              (click)="open('addService','',null)">Add Service</a></div>
 
-        </div>
-        <div class="table-responsive">
-          <table class="table align-items-center table-flush">
-            <thead class="thead-light">
-              <tr>
-                <th scope="col">S.no</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Image</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of userList | filter:searchUser | paginate
-              : {
-                  itemsPerPage: tableSize,
-                  currentPage: page,
-                  totalItems: count
-                }; let i = index">
-                <td>{{i+1}}</td>
-                <td>{{item.name}} </td>
-                <td><p> {{item.description}} </p></td>
-                <td><img [src]="item.image" *ngIf="item.image" width="100" height="100"></td>
-                <td class="row">
-                  <a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
-                    href="javascript:void(0)" (click)="open('addService','edit',item)"><i class="fa fa-pencil"></i>
-                    Edit</a>
-                    <a class="btn btn-success btn-sm"
-                    href="javascript:void(0)"  *ngIf="item.status == 1" (click)="changeStatus(item,0)">
-                    <i class="fa fa-check" title="Make Inactive"></i> </a>
-                  <a class="btn btn-danger btn-sm"
-                    href="javascript:void(0)"  *ngIf="item.status == 0" (click)="changeStatus(item,1)">
-                    <i class="fa fa-times" title="Make Active"></i></a>
-                </td>
-              </tr>
+          <ngx-datatable class="bootstrap" [rows]='userList' [columnMode]="'force'" [headerHeight]="50"
+            [footerHeight]="50" [rowHeight]="'auto'" [limit]="page.limit" [externalPaging]="true" [count]="page.count"
+            [offset]="page.offset" (page)="datatablePageData($event)">
 
-            </tbody>
-          </table>
-        </div>
-        <div class="d-flex justify-content-center">
-          <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
-          </pagination-controls>
+            <ngx-datatable-column name="Name">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.name}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Description">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <p [innerHtml]="row.description"></p>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Image">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <img [src]="row.image" *ngIf="row.image" width="40" height="40">
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Status">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class='font-success' *ngIf="row.status ==1">Active</div>
+                <div class='font-danger' *ngIf="row.status ==0">InActive</div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Actions">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
+                  href="javascript:void(0)" (click)="open('addService','edit',row)"><i class="fa fa-pencil"></i>
+                  Edit</a>
+                <a class="btn btn-success btn-sm" href="javascript:void(0)" *ngIf="row.status == 1"
+                  (click)="changeStatus(row,0)">
+                  <i class="fa fa-check" title="Make Inactive"></i> </a>
+                <a class="btn btn-danger btn-sm" href="javascript:void(0)" *ngIf="row.status == 0"
+                  (click)="changeStatus(row,1)">
+                  <i class="fa fa-times" title="Make Active"></i></a>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
         </div>
       </div>
     </div>
   </div>
 </div>
-
+<!-- Container-fluid Ends -->

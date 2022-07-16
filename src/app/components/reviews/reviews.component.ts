@@ -35,10 +35,6 @@ export class ReviewsComponent implements OnInit {
   token: any = ''
   submitted = false;
   data: any
-  page: number = 1;
-  count: number = 0;
-  tableSize: number = 7;
-  tableSizes: any = [3, 6, 9, 12];
   res: any
   news_data: any
   public editorValue: string = '';
@@ -46,7 +42,12 @@ export class ReviewsComponent implements OnInit {
   bsRangeValue: Date[];
   maxDate = new Date();
   minDate = new Date();
-
+  page = {
+    limit: 10,
+    count: 0,
+    offset: 0,
+    pageSize: 10
+  };
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService) {
     this.minDate.setDate(this.minDate.getDate() - 1);
     this.maxDate.setDate(this.maxDate.getDate() + 7);
@@ -77,7 +78,7 @@ export class ReviewsComponent implements OnInit {
   ngOnInit() {
     this.token = localStorage.getItem('token')
     this.newsForm()
-    this.getReviewsList()
+    this.getReviewsList(this.page.offset + 1)
   }
   public config: AngularEditorConfig = {
     editable: true,
@@ -160,7 +161,7 @@ export class ReviewsComponent implements OnInit {
               this.submitted = false;
               this.url = false;
               this.form.reset()
-              this.getReviewsList()
+              this.getReviewsList(this.page.offset + 1)
             },
             error => {
               console.log("Post failed with the errors", error.error);
@@ -223,8 +224,8 @@ export class ReviewsComponent implements OnInit {
           this.url = false;
           this.form_type = ''
           this.form.reset()
-          this.getReviewsList()
-         
+          this.getReviewsList(this.page.offset + 1)
+
         },
         error => {
           console.log("Post failed with the errors", error.error);
@@ -239,13 +240,15 @@ export class ReviewsComponent implements OnInit {
         }
       );
   }
-  getReviewsList() {
+  getReviewsList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/reviews', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/reviews?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.newsList = this.res
+        this.res = data;
+        this.newsList = this.res.data
+        this.page.count = this.res.meta.pagination.total
+        this.page.limit = this.res.meta.pagination.per_page
         console.log('newsList', this.newsList)
       },
         error => {
@@ -257,6 +260,13 @@ export class ReviewsComponent implements OnInit {
           }
         }
       );
+  }
+  updateFilter(event: any) {
+    console.log('event', event.target.value)
+  }
+  datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
+    this.page.offset = pageInfo.offset
+    this.getReviewsList(this.page.offset + 1)
   }
   open(content: any, type: any, data: any) {
     this.news_data = data
@@ -281,14 +291,7 @@ export class ReviewsComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-  onTableDataChange(event: any) {
-    this.page = event;
-  }
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
-  }
-  changeStatus(item,status) {
+  changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
     let formdata = new FormData()
@@ -302,7 +305,7 @@ export class ReviewsComponent implements OnInit {
           if (this.data.success == true) {
             this.toster.success(this.data.message);
           }
-          this.getReviewsList()
+          this.getReviewsList(this.page.offset + 1)
         },
         error => {
           console.log("Post failed with the errors", error.error);
@@ -318,7 +321,7 @@ export class ReviewsComponent implements OnInit {
       );
 
   }
-  close(){
+  close() {
     this.modalService.dismissAll()
     this.form.reset()
   }
@@ -337,7 +340,7 @@ export class ReviewsComponent implements OnInit {
           this.modalService.dismissAll()
           this.submitted = false;
           this.form.reset()
-          this.getReviewsList()
+          this.getReviewsList(this.page.offset + 1)
         },
         error => {
           console.log("Post failed with the errors", error.error);

@@ -28,14 +28,16 @@ export class ImageGalleryComponent implements OnInit {
     image: new FormControl(''),
   });
   submitted = false;
-  page: number = 1;
-  count: number = 0;
-  tableSize: number = 7;
-  tableSizes: any = [3, 6, 9, 12];
   token:any
   data:any
   res:any
   gallery_data:any
+  page = {
+    limit: 10,
+    count: 0,
+    offset: 0,
+    pageSize: 10
+  };
   public editorValue: string = '';
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder,public http: HttpClient, public toster: ToastrService,public authService: AuthService) { }
   selectFile(event: any) { //Angular 11, for stricter type
@@ -83,7 +85,7 @@ export class ImageGalleryComponent implements OnInit {
                   this.modalService.dismissAll()
                   this.submitted = false;
                   this.form.reset()
-                  this.getGalleryList()
+                  this.getGalleryList(this.page.offset + 1)
                 },
                 error => {
                   this.authService.showLoader = false
@@ -110,7 +112,7 @@ export class ImageGalleryComponent implements OnInit {
     this.token = localStorage.getItem('token')
     this.list = []
     this.listForm()
-    this.getGalleryList()
+    this.getGalleryList(this.page.offset + 1)
   }
  
   listForm() {
@@ -130,55 +132,22 @@ export class ImageGalleryComponent implements OnInit {
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
   }
-  onSubmit(): void {
-    // console.log('Date',this.form.value)
-    // this.submitted = true;
-    // if (this.form.invalid) {
-    //   return;
-    // }
-
-    // else {
-   
-    //     const headers = { 'Authorization': 'Bearer ' + this.token }
-    //     let formdata = new FormData()
-    //     formdata.append('image', this.image_upload)
-    //     this.http.post<any>(this.baseUrl + 'api/add_gallery_img', formdata, { 'headers': headers })
-    //       .subscribe(
-    //         response => {
-    //           this.data = response
-    //           console.log("Data" + this.data);
-    //           if (this.data.success == true) {
-    //             this.toster.success(this.data.message);
-    //           }
-    //           this.modalService.dismissAll()
-    //           this.submitted = false;
-    //           this.form.reset()
-    //           this.getGalleryList()
-    //         },
-    //         error => {
-    //           console.log("Post failed with the errors", error.error);
-    //           if (error.error && error.error.success == false) {
-    //             this.toster.error(error.error.message);
-    //           } else {
-    //             this.toster.error('Oops something went wrong!!');
-    //           }
-    //         },
-    //         () => {
-    //           console.log("Post Completed");
-    //         }
-    //       );
-    
-    // }
-
+  updateFilter(event: any) {
+    console.log('event', event.target.value)
   }
-
-getGalleryList() {
+  datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
+    this.page.offset = pageInfo.offset
+    this.getGalleryList(this.page.offset + 1)
+  }
+getGalleryList(page:any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/gallery_list?rows=10', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/gallery_list?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.list = this.res
+        this.res = data;
+        this.list = this.res.data
+        this.page.count = this.res.meta.pagination.total
+        this.page.limit = this.res.meta.pagination.per_page
         console.log('list', this.list)
       },
         error => {
@@ -215,13 +184,6 @@ getGalleryList() {
       return `with: ${reason}`;
     }
   }
-  onTableDataChange(event: any) {
-    this.page = event;
-  }
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
-  }
   changeStatus(item,status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
@@ -236,7 +198,7 @@ getGalleryList() {
           if (this.data.success == true) {
             this.toster.success(this.data.message);
           }
-          this.getGalleryList()
+          this.getGalleryList(this.page.offset + 1)
         },
         error => {
           console.log("Post failed with the errors", error.error);
@@ -268,7 +230,7 @@ getGalleryList() {
           this.modalService.dismissAll()
           this.submitted = false;
           this.form.reset()
-          this.getGalleryList()
+          this.getGalleryList(this.page.offset + 1)
         },
         error => {
           console.log("Post failed with the errors", error.error);

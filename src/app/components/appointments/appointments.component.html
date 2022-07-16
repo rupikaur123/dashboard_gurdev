@@ -1,72 +1,78 @@
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8"></div>
-<!-- Page content -->
-<div class="container-fluid mt--7">
-  <!-- Table -->
+<div class="container-fluid">
   <div class="row">
-    <div class="col">
-      <div class="card shadow">
-        <div class="card-header border-0">
-          <h3 class="mb-0">Appointments List</h3>
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Appointments List</h5>
         </div>
-        <div class="d-flex bd-highlight mb-3">
-          <div class="p-2 w-100 bd-highlight">
-
-            <input matInput type="search" placeholder="Search" class="search-input" [(ngModel)]="searchUser">
-
+        <div class="card-body custom-datatable">
+          <div class="d-flex bd-highlight mb-3">
+            <div class="p-2 w-100 bd-highlight">
+              <input type="text"  placeholder="Type to filter the name column..." (keyup)="updateFilter($event)"  />
+            </div>
           </div>
-        </div>
-        <div class="table-responsive">
-          <table class="table align-items-center table-flush">
-            <thead class="thead-light">
-              <tr>
-                <th scope="col">S.no</th>
-                <th scope="col">Service Name</th>
-                <th scope="col">Appointment Date</th>
-                <th scope="col">Full Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">DOB</th>
-                <th scope="col">Address</th>
-                <th scope="col">Phone No.</th>
-                <th scope="col">Comment</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of apptList | filter:searchUser | paginate
-              : {
-                  itemsPerPage: tableSize,
-                  currentPage: page,
-                  totalItems: count
-                }; let i = index">
-                <td>{{i+1}}</td>
-                <td>{{item.service_name}} </td>
-                <td>{{item.appointment_date}}</td>
-                <td>{{item.u_full_name}}</td>
-                <td>{{item.u_email}}</td>
-                <td>{{item.u_dob}} </td>
-                <td>{{item.u_address}}</td>
-                <td>{{item.u_phone_number}}</td>
-                <td>{{item.comment}}</td>
-                <td><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
-                    href="javascript:void(0)" (click)="open(viewAppt,'edit',item)"><i class="fa fa-pencil"></i>
-                    View</a><a class="icon" href="javascript:void(0)"></a>
-                </td>
-              </tr>
 
-            </tbody>
-          </table>
-        </div>
-        <div class="d-flex justify-content-center">
-          <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
-          </pagination-controls>
+          <ngx-datatable class="bootstrap" [rows]='apptList' [columnMode]="'force'" [headerHeight]="50"
+            [footerHeight]="50" [rowHeight]="'auto'" [limit]="page.limit" [externalPaging]="true" [count]="page.count"
+            [offset]="page.offset" (page)="datatablePageData($event)">
+
+            <ngx-datatable-column name="Service Name">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.service_name}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Appointment Date">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.appointment_date}}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Full Name">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.u_full_name}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Email">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.u_email}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="DOB">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.u_dob}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Address">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.u_address}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Phone No.">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.u_phone_number}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Comment">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.comment}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Actions">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm"
+                  href="javascript:void(0)" (click)="open(viewAppt,'edit',row)"><i class="fa fa-pencil"></i>
+                  View</a><a class="icon" href="javascript:void(0)"></a>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
-
+<!-- Container-fluid Ends -->
 <ng-template #viewAppt let-modal>
   <div class="modal-header">
     <strong class="modal-title" id="modal-basic-title">View Appointments</strong>

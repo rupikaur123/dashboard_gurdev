@@ -27,16 +27,12 @@ export class LatestNewsComponent implements OnInit {
   content: any = ''
   image: any = ''
   baseUrl: any = 'http://api.gurdevhospital.co/'
-  url: any= false; //Angular 11, for stricter type
+  url: any = false; //Angular 11, for stricter type
   msg = "";
   date: any;
   token: any = ''
   submitted = false;
   data: any
-  page: number = 1;
-  count: number = 0;
-  tableSize: number = 7;
-  tableSizes: any = [3, 6, 9, 12];
   res: any
   news_data: any
   public editorValue: string = '';
@@ -44,8 +40,14 @@ export class LatestNewsComponent implements OnInit {
   bsRangeValue: Date[];
   maxDate = new Date();
   minDate = new Date();
+  page = {
+    limit: 10,
+    count: 0,
+    offset: 0,
+    pageSize: 10
+  };
 
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router:Router) {
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router) {
     this.minDate.setDate(this.minDate.getDate() - 1);
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
@@ -75,17 +77,19 @@ export class LatestNewsComponent implements OnInit {
   }
   ngOnInit() {
     this.token = localStorage.getItem('token')
-    this.getNewsList()
+    this.getNewsList(this.page.offset + 1)
   }
- 
- 
-  getNewsList() {
+
+
+  getNewsList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/latestnews', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/latestnews?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.newsList = this.res
+        this.res = data;
+        this.newsList = this.res.data
+        this.page.count = this.res.meta.pagination.total
+        this.page.limit = this.res.meta.pagination.per_page
         console.log('newsList', this.newsList)
       },
         error => {
@@ -98,28 +102,28 @@ export class LatestNewsComponent implements OnInit {
         }
       );
   }
+  updateFilter(event: any) {
+    console.log('event', event.target.value)
+  }
+  datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
+    this.page.offset = pageInfo.offset
+    this.getNewsList(this.page.offset + 1)
+  }
   open(content: any, type: any, data: any) {
     if (type == 'edit') {
       this.form_type = 'edit'
-      this.router.navigate(['dashboard/add/news/'+data.id])
+      this.router.navigate(['dashboard/add/news/' + data.id])
     } else {
       this.router.navigate(['dashboard/add/news'])
     }
   }
- 
-  onTableDataChange(event: any) {
-    this.page = event;
-  }
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
-  }
-  changeStatus(item,status) {
+
+  changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
     let formdata = new FormData()
     formdata.append('id', item.id)
-    formdata.append('status',status)
+    formdata.append('status', status)
     this.http.post<any>(this.baseUrl + 'api/news_status', formdata, { 'headers': headers })
       .subscribe(
         response => {
@@ -128,7 +132,7 @@ export class LatestNewsComponent implements OnInit {
           if (this.data.success == true) {
             this.toster.success(this.data.message);
           }
-          this.getNewsList()
+          this.getNewsList(this.page.offset + 1)
         },
         error => {
           console.log("Post failed with the errors", error.error);
@@ -144,5 +148,5 @@ export class LatestNewsComponent implements OnInit {
       );
 
   }
- 
+
 }

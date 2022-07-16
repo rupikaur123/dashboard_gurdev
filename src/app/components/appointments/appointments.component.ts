@@ -38,21 +38,23 @@ export class AppointmentsComponent implements OnInit {
   });
   submitted = false;
   res: any
-  page: number = 1;
-  count: number = 0;
-  tableSize: number = 7;
-  tableSizes: any = [3, 6, 9, 12];
   token: any = ''
   baseUrl: any = 'http://api.gurdevhospital.co/'
   appt_data: any
   data: any
+  page = {
+    limit: 10,
+    count: 0,
+    offset: 0,
+    pageSize: 10
+  };
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService) { }
 
   ngOnInit() {
     this.token = localStorage.getItem('token')
     this.apptList = [{ 'name': 'test', 'status': 'Active' }, { 'name': 'Sham', 'status': 'Inactive' }, { 'name': 'test', 'status': 'Active' }, { 'name': 'Sham', 'status': 'Inactive' }, { 'name': 'test', 'status': 'Active' }, { 'name': 'Sham', 'status': 'Inactive' }, { 'name': 'test', 'status': 'Active' }, { 'name': 'Sham', 'status': 'Inactive' }, { 'name': 'test', 'status': 'Active' }, { 'name': 'Sham', 'status': 'Inactive' }]
     this.userForm()
-    this.getApptList()
+    this.getApptList(this.page.offset + 1)
   }
 
   userForm() {
@@ -121,13 +123,15 @@ export class AppointmentsComponent implements OnInit {
     return this.form.controls;
   }
 
-  getApptList() {
+  getApptList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/appointments', { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/appointments?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
-        this.res = data.data;
-        this.apptList = this.res
+        this.res = data;
+        this.apptList = this.res.data
+        this.page.count = this.res.meta.pagination.total
+        this.page.limit = this.res.meta.pagination.per_page
         console.log('appList', this.apptList)
       },
         error => {
@@ -139,6 +143,13 @@ export class AppointmentsComponent implements OnInit {
           }
         }
       );
+  }
+  updateFilter(event: any) {
+    console.log('event', event.target.value)
+  }
+  datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
+    this.page.offset = pageInfo.offset
+    this.getApptList(this.page.offset + 1)
   }
   onSubmit(): void {
     this.submitted = true;
@@ -171,14 +182,6 @@ export class AppointmentsComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
-  }
-  onTableDataChange(event: any) {
-    this.page = event;
-  }
-
-  onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
-    this.page = 1;
   }
 
   edit() {

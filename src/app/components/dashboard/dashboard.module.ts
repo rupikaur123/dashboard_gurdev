@@ -38,6 +38,7 @@ import {AddNewsComponent} from '../add-news/add-news.component'
 import {AddStaticPagesComponent} from '../add-static-page/add-static-page.component'
 import {AddDoctorComponent} from'../add-doctor/add-doctor.component'
 import {DoctorComponent} from '../doctor/doctor.component'
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent,AddNewsComponent,AddStaticPagesComponent,AddDoctorComponent,DoctorComponent],
@@ -60,6 +61,7 @@ import {DoctorComponent} from '../doctor/doctor.component'
     NgxPaginationModule,
     AngularEditorModule,
     HttpClientModule,
+    NgxDatatableModule,
     BsDatepickerModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: ''
