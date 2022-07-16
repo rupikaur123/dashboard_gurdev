@@ -15,7 +15,7 @@ export class ServicesComponent implements OnInit {
 
   public focus;
   userList: any = []
-  searchUser: any
+  search: any = ''
   closeResult: string = '';
   serviceName: any = ''
   token: any
@@ -46,7 +46,7 @@ export class ServicesComponent implements OnInit {
 
   getServiceList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/services?rows=10&page=' + page, { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/services?rows=10&page=' + page + '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
@@ -77,6 +77,8 @@ export class ServicesComponent implements OnInit {
 
   updateFilter(event: any) {
     console.log('event', event.target.value)
+    this.search = event.target.value
+    this.getServiceList(this.page.offset + 1)
   }
   changeStatus(item, status) {
     console.log('Item', item)

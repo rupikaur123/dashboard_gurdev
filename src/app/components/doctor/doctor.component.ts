@@ -15,7 +15,7 @@ export class DoctorComponent implements OnInit {
 
   public focus;
   doctorList: any = []
-  searchUser: any
+  search: any = ''
   closeResult: string = '';
   serviceName: any = ''
   token: any
@@ -42,7 +42,7 @@ export class DoctorComponent implements OnInit {
 
   getDoctorList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/doctors?rows=10&page=' + page, { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/doctors?rows=10&page=' + page + '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
@@ -63,6 +63,8 @@ export class DoctorComponent implements OnInit {
   }
   updateFilter(event: any) {
     console.log('event', event.target.value)
+    this.search = event.target.value
+    this.getDoctorList(this.page.offset + 1)
   }
   datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
     this.page.offset = pageInfo.offset

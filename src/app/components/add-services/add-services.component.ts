@@ -18,7 +18,7 @@ export class AddServicesComponent implements OnInit {
   serviceName: any = ''
   token: any
   image: any = ''
-  banner_img:any
+  banner_img: any
   description: any = ''
   alies_name: any = ''
   url: any = false; //Angular 11, for stricter type
@@ -39,7 +39,7 @@ export class AddServicesComponent implements OnInit {
   data: any
   image_upload: any
   bannerimage_upload: any
-  banner_url:any= false
+  banner_url: any = false
   id: any
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router, private route: ActivatedRoute) {
     this.id = this.route.snapshot.params['id']
@@ -51,12 +51,15 @@ export class AddServicesComponent implements OnInit {
     if (this.id != undefined) {
       this.form_type = 'edit'
     }
+    if (this.id == undefined) {
+      this.form_type = 'create'
+    }
     if (this.form_type == 'edit') {
       this.edit()
     }
     this.userForm()
-   
-   
+
+
   }
 
 
@@ -68,7 +71,7 @@ export class AddServicesComponent implements OnInit {
           this.serviceName,
           [
             Validators.required,
-            Validators.minLength(4),
+            Validators.minLength(5),
           ]
         ],
         description: [
@@ -105,14 +108,12 @@ export class AddServicesComponent implements OnInit {
     return this.form.controls;
   }
   onSubmit(): void {
-    console.log(this.form.value.name);
     this.submitted = true;
-    if (this.form.invalid && this.form_type != 'edit') {
+    if (this.form.invalid && this.form_type == 'create') {
       return;
     }
-
     else {
-      if (this.form_type != 'edit') {
+      if (this.form_type == 'create') {
         const headers = { 'Authorization': 'Bearer ' + this.token }
         let formdata = new FormData()
         formdata.append('name', this.form.value.name)
@@ -149,7 +150,7 @@ export class AddServicesComponent implements OnInit {
             }
           );
       }
-      if (this.form_type == 'edit') {
+      else if (this.form_type == 'edit') {
         this.update()
       }
     }
@@ -219,7 +220,7 @@ export class AddServicesComponent implements OnInit {
     formdata.append('alies_name', this.form.value.alies_name)
     if (this.image_upload != undefined) {
       formdata.append('image', this.image_upload)
-    } if(this.bannerimage_upload != undefined){
+    } if (this.bannerimage_upload != undefined) {
       formdata.append('banner_image', this.bannerimage_upload)
     }
 
@@ -255,7 +256,7 @@ export class AddServicesComponent implements OnInit {
   }
 
 
-  selectFile(event: any,type:any) { //Angular 11, for stricter type
+  selectFile(event: any, type: any) { //Angular 11, for stricter type
     if (!event.target.files[0] || event.target.files[0].length == 0) {
       this.msg = 'You must select an image';
       return;
@@ -274,15 +275,15 @@ export class AddServicesComponent implements OnInit {
     reader.onload = (_event) => {
       this.msg = "";
       // this.url = reader.result;
-    
-      if(type == 'image'){
+
+      if (type == 'image') {
         this.image_upload = event.target.files[0]
         this.url = true;
-      } else if(type == 'banner'){
+      } else if (type == 'banner') {
         this.bannerimage_upload = event.target.files[0]
         this.banner_url = true;
       }
-    
+
       console.log('URL', this.image_upload)
     }
   }

@@ -19,7 +19,7 @@
                 <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
                   <div *ngIf="f['name'].errors['required']">Service Name is required</div>
                   <div *ngIf="f['name'].errors['minlength']">
-                    Service Name must be at least 4 characters
+                    Service Name must be at least 5 characters
                   </div>
 
                 </div>
@@ -50,6 +50,9 @@
                   [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"></angular-editor>
                 <div *ngIf="submitted && f['description'].errors" class="invalid-feedback">
                   <div *ngIf="f['description'].errors['required']">Description is required</div>
+                  <div *ngIf="f['description'].errors['minlength']">
+                    Description must be at least 10 characters
+                  </div>
                 </div>
               </div>
             </div>
@@ -58,7 +61,7 @@
           <div *ngIf="form_type=='edit' && res != null && url != true">
             <div class="card">
               <div class="card-body">
-                <img [src]="res.image" *ngIf="res.image" width="500" height="200">  
+                <img [src]="res.image" *ngIf="res.image" width="500" height="200">
               </div>
             </div>
           </div>

@@ -18,7 +18,7 @@ export class ReviewsComponent implements OnInit {
 
   public focus;
   newsList: any = []
-  searchUser: any
+  search: any=''
   closeResult: string = '';
   image_upload: any
   form_type: any = ''
@@ -242,7 +242,7 @@ export class ReviewsComponent implements OnInit {
   }
   getReviewsList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
-    this.http.get<any>(this.baseUrl + 'api/reviews?rows=10&page=' + page, { 'headers': headers })
+    this.http.get<any>(this.baseUrl + 'api/reviews?rows=10&page=' + page+ '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
@@ -263,6 +263,8 @@ export class ReviewsComponent implements OnInit {
   }
   updateFilter(event: any) {
     console.log('event', event.target.value)
+    this.search= event.target.value
+    this.getReviewsList(this.page.offset+1)
   }
   datatablePageData(pageInfo: { count?: number, pageSize?: number, limit?: number, offset?: number }) {
     this.page.offset = pageInfo.offset
