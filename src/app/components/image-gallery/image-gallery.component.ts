@@ -3,9 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../shared/services/firebase/auth.service';
-
-
+import { LoaderService } from 'src/app/shared/services/loader.service'
 
 @Component({
   selector: 'app-image-gallery',
@@ -28,10 +26,10 @@ export class ImageGalleryComponent implements OnInit {
     image: new FormControl(''),
   });
   submitted = false;
-  token:any
-  data:any
-  res:any
-  gallery_data:any
+  token: any
+  data: any
+  res: any
+  gallery_data: any
   page = {
     limit: 10,
     count: 0,
@@ -39,7 +37,7 @@ export class ImageGalleryComponent implements OnInit {
     pageSize: 10
   };
   public editorValue: string = '';
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder,public http: HttpClient, public toster: ToastrService,public authService: AuthService) { }
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private loader: LoaderService) { }
   selectFile(event: any) { //Angular 11, for stricter type
     if (!event.target.files[0] || event.target.files[0].length == 0) {
       this.msg = 'You must select an image';
@@ -60,61 +58,60 @@ export class ImageGalleryComponent implements OnInit {
       this.msg = "";
       this.url = reader.result;
       this.image_upload = event.target.files[0]
-      if(this.image_upload != '' || this.image_upload != undefined){
-        console.log('Date',this.form.value)
+      if (this.image_upload != '' || this.image_upload != undefined) {
+        console.log('Date', this.form.value)
         this.submitted = true;
         if (this.form.invalid) {
           return;
         }
-    
+
         else {
-          this.authService.showLoader = true
-            const headers = { 'Authorization': 'Bearer ' + this.token }
-            let formdata = new FormData()
-            formdata.append('image', this.image_upload)
-            
-            this.http.post<any>(this.baseUrl + 'api/add_gallery_img', formdata, { 'headers': headers })
-              .subscribe(
-                response => {
-                  this.authService.showLoader = false
-                  this.data = response
-                  console.log("Data" + this.data);
-                  if (this.data.success == true) {
-                    this.toster.success(this.data.message);
-                  }
-                  this.modalService.dismissAll()
-                  this.submitted = false;
-                  this.form.reset()
-                  this.getGalleryList(this.page.offset + 1)
-                },
-                error => {
-                  this.authService.showLoader = false
-                  console.log("Post failed with the errors", error.error);
-                  if (error.error && error.error.success == false) {
-                    this.toster.error(error.error.message);
-                  } else {
-                    this.toster.error('Oops something went wrong!!');
-                  }
-                },
-                () => {
-                  console.log("Post Completed");
+          console.log('**')
+          this.loader.setLoaderValue(true)
+
+          const headers = { 'Authorization': 'Bearer ' + this.token }
+          let formdata = new FormData()
+          formdata.append('image', this.image_upload)
+
+          this.http.post<any>(this.baseUrl + 'api/add_gallery_img', formdata, { 'headers': headers })
+            .subscribe(
+              response => {
+                this.data = response
+                console.log("Data" + this.data);
+                if (this.data.success == true) {
+                  this.toster.success(this.data.message);
                 }
-              );
-        
+                this.modalService.dismissAll()
+                this.submitted = false;
+                this.form.reset()
+                this.getGalleryList(this.page.offset + 1)
+              },
+              error => {
+                console.log("Post failed with the errors", error.error);
+                if (error.error && error.error.success == false) {
+                  this.toster.error(error.error.message);
+                } else {
+                  this.toster.error('Oops something went wrong!!');
+                }
+              },
+              () => {
+                console.log("Post Completed");
+              }
+            );
+
         }
-    
+
       }
     }
-   
+
   }
   ngOnInit() {
-    this.authService.showLoader = true
     this.token = localStorage.getItem('token')
     this.list = []
     this.listForm()
     this.getGalleryList(this.page.offset + 1)
   }
- 
+
   listForm() {
     this.form = this.formBuilder.group(
       {
@@ -139,7 +136,7 @@ export class ImageGalleryComponent implements OnInit {
     this.page.offset = pageInfo.offset
     this.getGalleryList(this.page.offset + 1)
   }
-getGalleryList(page:any) {
+  getGalleryList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
     this.http.get<any>(this.baseUrl + 'api/gallery_list?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
@@ -163,7 +160,7 @@ getGalleryList(page:any) {
 
   open(content: any, type: any, data: any) {
     if (type == 'delete') {
-     this.gallery_data = data
+      this.gallery_data = data
       console.log('^^', this.gallery_data)
     } else {
       this.submitted = false
@@ -184,7 +181,7 @@ getGalleryList(page:any) {
       return `with: ${reason}`;
     }
   }
-  changeStatus(item,status) {
+  changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
     let formdata = new FormData()
@@ -214,8 +211,8 @@ getGalleryList(page:any) {
       );
 
   }
-  delete(){
-    
+  delete() {
+
     const headers = { 'Authorization': 'Bearer ' + this.token }
     let formdata = new FormData()
     formdata.append('id', this.gallery_data.id)

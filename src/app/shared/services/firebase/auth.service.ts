@@ -6,7 +6,6 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service';
 import * as firebase from 'firebase/app';
-
 import { HttpClient } from '@angular/common/http';
 
 

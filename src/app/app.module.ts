@@ -35,6 +35,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 // import { NgxPaginationModule } from 'ngx-pagination';
+import { LoaderService } from 'src/app/shared/services/loader.service';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -76,7 +77,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     // for Core use:
     LoadingBarModule
   ],
-  providers: [AuthService, AdminGuard, SecureInnerPagesGuard, CookieService],
+  providers: [AuthService, AdminGuard, SecureInnerPagesGuard, CookieService,LoaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
