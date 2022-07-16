@@ -8,7 +8,7 @@
         <div class="card-body custom-datatable">
           <div class="d-flex bd-highlight mb-3">
             <div class="p-2 w-100 bd-highlight">
-              <input type="text"  placeholder="Type to filter the name column..." (keyup)="updateFilter($event)"  />
+              <input type="text"  placeholder="Type to filter..." (keyup)="updateFilter($event)"  />
             </div>
             <div class="p-2 flex-shrink-2 bd-highlight"> <a href="javaScript:void(0);" class="btn btn-info"
                 (click)="open(addService,'',null)">Add Reviews</a></div>
@@ -72,8 +72,8 @@
 
 <ng-template #addService let-modal>
   <div class="modal-header">
-    <strong class="modal-title" id="modal-basic-title" *ngIf="form_type!='edit'">Create Review</strong>
-    <strong class="modal-title" id="modal-basic-title" *ngIf="form_type=='edit'">Update Review</strong>
+    <h5 class="modal-title" id="modal-basic-title" *ngIf="form_type!='edit'">Create Review</h5>
+    <h5 class="modal-title" id="modal-basic-title" *ngIf="form_type=='edit'">Update Review</h5>
     <button type="button" class="close" aria-label="Close" (click)="close()">
       <span aria-hidden="true">×</span>
     </button>
@@ -81,7 +81,7 @@
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <strong>Review</strong>
+        <label>Review</label>
         <textarea type="text" formControlName="review" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['review'].errors }"></textarea>
         <div *ngIf="submitted && f['review'].errors" class="invalid-feedback">
@@ -96,7 +96,7 @@
         <img [src]="news_data.image" *ngIf="news_data.image" width="200" height="150">
       </div>
       <div class="form-group">
-        <strong>Image</strong>
+        <label>Image</label>
         <input type="file" (change)="selectFile($event)" formControlName="image" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['image'].errors }">
 

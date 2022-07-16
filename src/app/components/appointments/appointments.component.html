@@ -8,7 +8,7 @@
         <div class="card-body custom-datatable">
           <div class="d-flex bd-highlight mb-3">
             <div class="p-2 w-100 bd-highlight">
-              <input type="text"  placeholder="Type to filter the name column..." (keyup)="updateFilter($event)"  />
+              <input type="text"  placeholder="Type to filter..." (keyup)="updateFilter($event)"  />
             </div>
           </div>
 
@@ -75,7 +75,7 @@
 <!-- Container-fluid Ends -->
 <ng-template #viewAppt let-modal>
   <div class="modal-header">
-    <strong class="modal-title" id="modal-basic-title">View Appointments</strong>
+    <h5 class="modal-title" id="modal-basic-title">View Appointments</h5>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">×</span>
     </button>
@@ -83,7 +83,7 @@
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <strong>Service Name</strong>
+        <label>Service Name</label>
         <input type="text" formControlName="apptName" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['apptName'].errors }" readonly />
         <div *ngIf="submitted && f['apptName'].errors" class="invalid-feedback">
@@ -95,7 +95,7 @@
         </div>
       </div>
       <div class="form-group">
-        <strong>Appoinment Date</strong>
+        <label>Appoinment Date</label>
         <input type="text" formControlName="apptDate" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['apptDate'].errors }" readonly />
         <div *ngIf="submitted && f['apptDate'].errors" class="invalid-feedback">
@@ -105,7 +105,7 @@
         </div>
       </div>
       <div class="form-group">
-        <strong>Full Name</strong>
+        <label>Full Name</label>
         <input type="text" formControlName="fullName" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['fullName'].errors }" readonly />
         <div *ngIf="submitted && f['fullName'].errors" class="invalid-feedback">
@@ -113,7 +113,7 @@
         </div>
       </div>
       <div class="form-group">
-        <strong>Email</strong>
+        <label>Email</label>
         <input type="email" formControlName="email" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" readonly />
         <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
@@ -121,7 +121,7 @@
         </div>
       </div>
       <div class="form-group">
-        <strong>DOB</strong>
+        <label>DOB</label>
         <input type="text" formControlName="dob" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }" readonly />
         <div *ngIf="submitted && f['dob'].errors" class="invalid-feedback">
@@ -130,7 +130,7 @@
       </div>
 
       <div class="form-group">
-        <strong>Address</strong>
+        <label>Address</label>
         <input type="text" formControlName="address" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" readonly />
         <div *ngIf="submitted && f['address'].errors" class="invalid-feedback">
@@ -138,7 +138,7 @@
         </div>
       </div>
       <div class="form-group">
-        <strong>Phone No.</strong>
+        <label>Phone No.</label>
         <input type="text" formControlName="phone_no" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['phone_no'].errors }" readonly />
         <div *ngIf="submitted && f['phone_no'].errors" class="invalid-feedback">
@@ -146,7 +146,7 @@
         </div>
       </div>
       <div class="form-group">
-        <strong>Comment</strong>
+        <label>Comment</label>
         <textarea formControlName="comment" class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['comment'].errors }" readonly></textarea>
         <div *ngIf="submitted && f['comment'].errors" class="invalid-feedback">

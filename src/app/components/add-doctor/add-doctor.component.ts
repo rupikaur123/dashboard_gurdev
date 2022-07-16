@@ -72,14 +72,14 @@ export class AddDoctorComponent implements OnInit {
           this.fname,
           [
             Validators.required,
-            Validators.minLength(5),
+            Validators.minLength(3),
           ]
         ],
         lname: [
           this.lname,
           [
             Validators.required,
-            Validators.minLength(5),
+            Validators.minLength(3),
           ]
         ],
         profession: [
@@ -93,7 +93,7 @@ export class AddDoctorComponent implements OnInit {
           this.quali,
           [
             Validators.required,
-            Validators.minLength(5),
+            Validators.minLength(3),
           ]
         ],
         image: [
