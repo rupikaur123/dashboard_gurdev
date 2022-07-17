@@ -29,7 +29,7 @@
   </div>
     <div>
         <label>Banner Image</label>
-        <div [innerHtml]='msg' *ngIf="msg" style="color: red;"></div>
+        <div [innerHTML]='msg' *ngIf="msg" style="color: red;"></div>
         <div><img [src]="url" *ngIf="url"></div>
         <div class="form-group">
             <input type="file" (change)="selectFile($event)" formControlName="bannerImg" class="form-control"
