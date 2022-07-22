@@ -28,7 +28,7 @@ const routes: Routes = [
         component: DefaultComponent
       },
       {
-        path: 'ecommerce',
+        path: '',
         component: EcommerceComponent
       },
       {

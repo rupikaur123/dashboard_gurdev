@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
 
   constructor(public authService: AuthService, private fb: FormBuilder, private router: Router, public http: HttpClient, public toster: ToastrService,) {
     this.loginForm = this.fb.group({
-      email: ['test@gmail.com', [Validators.required, Validators.email]],
-      password: ['test123', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
     });
   }
 
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
             if (this.data.success == true) {
               localStorage.setItem('token', this.data.data.token)
               this.toster.success(this.data.message);
-              this.router.navigate(['/dashboard/ecommerce']);
+              this.router.navigate(['/dashboard']);
             }
 
 

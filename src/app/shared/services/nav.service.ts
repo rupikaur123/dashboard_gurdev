@@ -87,7 +87,7 @@ export class NavService implements OnDestroy {
 		// 		{ path: '/dashboard/ecommerce', title: 'Dashboard',icon: 'home',type: 'link' }
 		// 	]
 		// },
-		{ path: '/dashboard/ecommerce', title: 'Dashboard', icon: 'home', type: 'link' },
+		{ path: '/dashboard', title: 'Dashboard', icon: 'home', type: 'link' },
 		{ path: '/dashboard/service', title: 'Services', icon: 'edit', type: 'link' },
 		{ path: '/dashboard/appointments', title: 'Appointments', icon: 'edit', type: 'link' },
 		{ path: '/dashboard/latest-news', title: 'Latest News', icon: 'edit', type: 'link' },

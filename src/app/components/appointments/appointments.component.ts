@@ -155,9 +155,9 @@ export class AppointmentsComponent implements OnInit {
   }
   onSubmit(): void {
     this.submitted = true;
-    if (this.form.invalid) {
-      return;
-    }
+    // if (this.form.invalid) {
+    //   return;
+    // }
     this.modalService.dismissAll()
     this.submitted = false;
     this.form.reset()

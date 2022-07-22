@@ -9,7 +9,7 @@
               <p>Enter your email & password to login</p>
               <div class="form-group">
                 <label class="col-form-label">Email Address</label>
-                <input class="form-control" type="email" required="" placeholder="Enter email"
+                <input class="form-control" type="email" required placeholder="Enter email"
                   formControlName="email">
                 <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.required"
                   class="text text-danger mt-1">
@@ -22,7 +22,7 @@
               </div>
               <div class="form-group">
                 <label class="col-form-label">Password</label>
-                <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password" required=""
+                <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password" 
                   placeholder="Enter password">
                 <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
                 <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
