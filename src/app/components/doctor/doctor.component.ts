@@ -25,6 +25,7 @@ export class DoctorComponent implements OnInit {
   baseUrl: any = 'http://api.gurdevhospital.co/'
   res: any = ''
   data: any
+  loading=false
   image_upload: any
   page = {
     limit: 10,
@@ -42,8 +43,10 @@ export class DoctorComponent implements OnInit {
 
   getDoctorList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/doctors?rows=10&page=' + page + '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
         this.doctorList = this.res.data
@@ -52,6 +55,7 @@ export class DoctorComponent implements OnInit {
         console.log('doctorList', this.doctorList)
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -80,12 +84,14 @@ export class DoctorComponent implements OnInit {
   changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('id', item.id)
     formdata.append('status', status)
     this.http.post<any>(this.baseUrl + 'api/change_doctor_status', formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -94,6 +100,7 @@ export class DoctorComponent implements OnInit {
           this.getDoctorList(this.page.offset + 1)
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

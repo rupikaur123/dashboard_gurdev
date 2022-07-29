@@ -21,6 +21,7 @@ export class AddDoctorComponent implements OnInit {
   profession: any
   quali: any = ''
   email: any = ''
+  loading=false
   url: any = false; //Angular 11, for stricter type
   msg = "";
   phone: any = ''
@@ -132,6 +133,7 @@ export class AddDoctorComponent implements OnInit {
     else {
       if (this.form_type != 'edit') {
         const headers = { 'Authorization': 'Bearer ' + this.token }
+        this.loading=true
         let formdata = new FormData()
         formdata.append('first_name', this.form.value.fname)
         formdata.append('last_name', this.form.value.lname)
@@ -143,6 +145,7 @@ export class AddDoctorComponent implements OnInit {
         this.http.post<any>(this.baseUrl + 'api/doctors', formdata, { 'headers': headers })
           .subscribe(
             response => {
+              this.loading=false
               this.data = response
               console.log("Data" + this.data);
               if (this.data.success == true) {
@@ -156,6 +159,7 @@ export class AddDoctorComponent implements OnInit {
 
             },
             error => {
+              this.loading=false
               console.log("Post failed with the errors", error.error);
               if (error.error && error.error.success == false) {
                 this.toster.error(error.error.message);
@@ -176,8 +180,10 @@ export class AddDoctorComponent implements OnInit {
   }
   edit() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/doctors/' + this.id + '/edit', { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
         this.fname = this.res.first_name
@@ -191,6 +197,7 @@ export class AddDoctorComponent implements OnInit {
         this.userForm()
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -203,6 +210,7 @@ export class AddDoctorComponent implements OnInit {
 
   update() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('first_name', this.form.value.fname)
     formdata.append('last_name', this.form.value.lname)
@@ -217,6 +225,7 @@ export class AddDoctorComponent implements OnInit {
     this.http.post<any>(this.baseUrl + 'api/doctors/' + this.id, formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -229,6 +238,7 @@ export class AddDoctorComponent implements OnInit {
           this.router.navigate(['dashboard/doctor'])
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

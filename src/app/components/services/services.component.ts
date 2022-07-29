@@ -23,6 +23,7 @@ export class ServicesComponent implements OnInit {
   msg = "";
   submitted = false;
   tableSize: number = 7;
+  loading:Boolean=false
   tableSizes: any = [3, 6, 9, 12];
   baseUrl: any = 'http://api.gurdevhospital.co/'
   res: any = ''
@@ -46,8 +47,10 @@ export class ServicesComponent implements OnInit {
 
   getServiceList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading= true
     this.http.get<any>(this.baseUrl + 'api/services?rows=10&page=' + page + '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
+        this.loading= false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
         this.userList = this.res.data
@@ -56,6 +59,7 @@ export class ServicesComponent implements OnInit {
         console.log('UserList', this.userList, this.total_count, this.per_page)
       },
         error => {
+          this.loading= false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -83,12 +87,14 @@ export class ServicesComponent implements OnInit {
   changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading= true
     let formdata = new FormData()
     formdata.append('id', item.id)
     formdata.append('status', status)
     this.http.post<any>(this.baseUrl + 'api/services_status', formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading= false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -97,6 +103,7 @@ export class ServicesComponent implements OnInit {
           this.getServiceList(this.page.offset + 1)
         },
         error => {
+          this.loading= false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

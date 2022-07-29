@@ -19,6 +19,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 // for Core import:
 import { LoadingBarModule } from '@ngx-loading-bar/core';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import { AuthService } from './shared/services/firebase/auth.service';
 import { AdminGuard } from './shared/guard/admin.guard';
@@ -36,6 +37,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 // import { NgxPaginationModule } from 'ngx-pagination';
 import { LoaderService } from 'src/app/shared/services/loader.service';
+
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -63,6 +65,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2SearchPipeModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatProgressSpinnerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

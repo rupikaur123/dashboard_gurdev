@@ -25,6 +25,7 @@ export class AppointmentsComponent implements OnInit {
   address: any = ''
   phone_no: any = ''
   comment: any = ''
+  loading=false
   form: FormGroup = new FormGroup({
     apptName: new FormControl(''),
     apptDate: new FormControl(''),
@@ -125,8 +126,10 @@ export class AppointmentsComponent implements OnInit {
 
   getApptList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/appointments?rows=10&page=' + page+ '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
         this.apptList = this.res.data
@@ -135,6 +138,7 @@ export class AppointmentsComponent implements OnInit {
         console.log('appList', this.apptList)
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -188,8 +192,10 @@ export class AppointmentsComponent implements OnInit {
 
   edit() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading= true
     this.http.get<any>(this.baseUrl + 'api/appointments/' + this.appt_data.id, { 'headers': headers })
       .subscribe(data => {
+        this.loading= false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
         this.apptDate = this.res.appointment_date
@@ -204,6 +210,7 @@ export class AppointmentsComponent implements OnInit {
         this.userForm()
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);

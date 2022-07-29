@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
-
+import { LoaderService } from 'src/app/shared/services/loader.service';
 
 
 @Component({
@@ -35,6 +35,7 @@ export class LatestNewsComponent implements OnInit {
   data: any
   res: any
   news_data: any
+  loading=false
   public editorValue: string = '';
   bsValue = new Date();
   bsRangeValue: Date[];
@@ -47,7 +48,7 @@ export class LatestNewsComponent implements OnInit {
     pageSize: 10
   };
 
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router) {
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router,private loaderService:LoaderService) {
     this.minDate.setDate(this.minDate.getDate() - 1);
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
@@ -83,8 +84,10 @@ export class LatestNewsComponent implements OnInit {
 
   getNewsList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading= true
     this.http.get<any>(this.baseUrl + 'api/latestnews?rows=10&page=' + page + '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
+        this.loading= false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
         this.newsList = this.res.data
@@ -93,6 +96,7 @@ export class LatestNewsComponent implements OnInit {
         console.log('newsList', this.newsList)
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -123,12 +127,14 @@ export class LatestNewsComponent implements OnInit {
   changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading = true
     let formdata = new FormData()
     formdata.append('id', item.id)
     formdata.append('status', status)
     this.http.post<any>(this.baseUrl + 'api/news_status', formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -137,6 +143,7 @@ export class LatestNewsComponent implements OnInit {
           this.getNewsList(this.page.offset + 1)
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

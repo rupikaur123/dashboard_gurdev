@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router'
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { trackByHourSegment } from 'angular-calendar/modules/common/util';
 
 @Component({
   selector: 'app-services',
@@ -24,6 +25,7 @@ export class AddServicesComponent implements OnInit {
   url: any = false; //Angular 11, for stricter type
   msg = "";
   user_data: any
+  loading=false
   form: FormGroup = new FormGroup({
     name: new FormControl(''),
     image: new FormControl(''),
@@ -115,6 +117,7 @@ export class AddServicesComponent implements OnInit {
     else {
       if (this.form_type == 'create') {
         const headers = { 'Authorization': 'Bearer ' + this.token }
+        this.loading= true
         let formdata = new FormData()
         formdata.append('name', this.form.value.name)
         formdata.append('description', this.form.value.description)
@@ -124,6 +127,7 @@ export class AddServicesComponent implements OnInit {
         this.http.post<any>(this.baseUrl + 'api/services', formdata, { 'headers': headers })
           .subscribe(
             response => {
+              this.loading= false
               this.data = response
               console.log("Data" + this.data);
               if (this.data.success == true) {
@@ -138,6 +142,7 @@ export class AddServicesComponent implements OnInit {
 
             },
             error => {
+              this.loading= false
               console.log("Post failed with the errors", error.error);
               if (error.error && error.error.success == false) {
                 this.toster.error(error.error.message);
@@ -158,8 +163,10 @@ export class AddServicesComponent implements OnInit {
   }
   edit() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/services/' + this.id + '/edit', { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
         this.serviceName = this.res.name
@@ -171,6 +178,7 @@ export class AddServicesComponent implements OnInit {
         this.userForm()
       },
         error => {
+          this.loading=true
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -214,6 +222,7 @@ export class AddServicesComponent implements OnInit {
   }
   update() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('name', this.form.value.name)
     formdata.append('description', this.form.value.description)
@@ -228,6 +237,7 @@ export class AddServicesComponent implements OnInit {
     this.http.post<any>(this.baseUrl + 'api/services/' + this.id, formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -242,6 +252,7 @@ export class AddServicesComponent implements OnInit {
           this.router.navigate(['dashboard/service'])
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

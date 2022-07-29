@@ -23,6 +23,7 @@ export class AddNewsComponent implements OnInit {
   title: any = ''
   content: any = ''
   image: any = ''
+  loading=false
   baseUrl: any = 'http://api.gurdevhospital.co/'
   url: any = false; //Angular 11, for stricter type
   msg = "";
@@ -46,7 +47,7 @@ export class AddNewsComponent implements OnInit {
   id: any
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router, private route: ActivatedRoute) {
     this.minDate.setDate(this.minDate.getDate() - 1);
-    this.maxDate.setDate(this.maxDate.getDate() + 7);
+    this.maxDate.setDate(this.maxDate.getDate());
     this.bsRangeValue = [this.bsValue, this.maxDate];
     this.id = this.route.snapshot.params['id']
     console.log('id', this.id)
@@ -161,6 +162,7 @@ export class AddNewsComponent implements OnInit {
     else {
       if (this.form_type != 'edit') {
         const headers = { 'Authorization': 'Bearer ' + this.token }
+        this.loading=true
         let formdata = new FormData()
         formdata.append('title', this.form.value.title)
         formdata.append('content', this.form.value.content)
@@ -169,6 +171,7 @@ export class AddNewsComponent implements OnInit {
         this.http.post<any>(this.baseUrl + 'api/latestnews', formdata, { 'headers': headers })
           .subscribe(
             response => {
+              this.loading=false
               this.data = response
               console.log("Data" + this.data);
               if (this.data.success == true) {
@@ -181,6 +184,7 @@ export class AddNewsComponent implements OnInit {
                 this.router.navigate(['dashboard/latest-news'])
             },
             error => {
+              this.loading=false
               console.log("Post failed with the errors", error.error);
               if (error.error && error.error.success == false) {
                 this.toster.error(error.error.message);
@@ -201,8 +205,10 @@ export class AddNewsComponent implements OnInit {
   }
   edit() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/latestnews/' + this.id + '/edit', { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
         this.title = this.res.title
@@ -213,6 +219,7 @@ export class AddNewsComponent implements OnInit {
         this.newsForm()
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -225,6 +232,7 @@ export class AddNewsComponent implements OnInit {
 
   update() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('title', this.form.value.title)
     formdata.append('content', this.form.value.content)
@@ -237,6 +245,7 @@ export class AddNewsComponent implements OnInit {
     this.http.post<any>(this.baseUrl + 'api/latestnews/' + this.id, formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -251,6 +260,7 @@ export class AddNewsComponent implements OnInit {
 
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

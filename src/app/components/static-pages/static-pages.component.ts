@@ -24,6 +24,7 @@ export class StaticPagesComponent implements OnInit {
   token: any = ''
   data: any
   res: any
+  loading=false
   page = {
     limit: 10,
     count: 0,
@@ -42,8 +43,10 @@ export class StaticPagesComponent implements OnInit {
 
   getReviewsList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/static_pages?rows=10&page=' + page + '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
         this.newsList = this.res.data
@@ -52,6 +55,7 @@ export class StaticPagesComponent implements OnInit {
         console.log('newsList', this.newsList)
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -78,12 +82,14 @@ export class StaticPagesComponent implements OnInit {
   changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('id', item.id)
     formdata.append('status', status)
     this.http.post<any>(this.baseUrl + 'api/review_status', formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -92,6 +98,7 @@ export class StaticPagesComponent implements OnInit {
           this.getReviewsList(this.page.offset + 1)
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

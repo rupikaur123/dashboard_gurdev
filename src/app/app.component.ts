@@ -5,13 +5,16 @@ import { map, delay, withLatestFrom } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { LoaderService } from 'src/app/shared/services/loader.service';
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  
+
+  public loading:boolean= true;
   // For Progressbar
   loaders = this.loader.progress$.pipe(
     delay(1000),
@@ -20,7 +23,10 @@ export class AppComponent {
   );
   
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
-    private loader: LoadingBarService, translate: TranslateService,private loaderService:LoaderService) {
+    public loader: LoadingBarService, translate: TranslateService,private loaderService:LoaderService) {
+      setTimeout(() => {
+        this.loading = false;
+      }, 3000);
       console.log('App')
     if (isPlatformBrowser(this.platformId)) {
       translate.setDefaultLang('en');

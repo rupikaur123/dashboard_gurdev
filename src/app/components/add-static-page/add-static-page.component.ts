@@ -26,6 +26,7 @@ export class AddStaticPagesComponent implements OnInit {
   title: any
   content: any
   image: any = ''
+  loading=false
   baseUrl: any = 'http://api.gurdevhospital.co/'
   url: any = false; //Angular 11, for stricter type
   msg = "";
@@ -156,6 +157,7 @@ export class AddStaticPagesComponent implements OnInit {
     else {
       if (this.form_type != 'edit') {
         const headers = { 'Authorization': 'Bearer ' + this.token }
+        this.loading=true
         let formdata = new FormData()
         formdata.append('title', this.form.value.title)
         formdata.append('content', this.form.value.content)
@@ -163,6 +165,7 @@ export class AddStaticPagesComponent implements OnInit {
         this.http.post<any>(this.baseUrl + 'api/static_pages', formdata, { 'headers': headers })
           .subscribe(
             response => {
+              this.loading=false
               this.data = response
               console.log("Data" + this.data);
               if (this.data.success == true) {
@@ -175,6 +178,7 @@ export class AddStaticPagesComponent implements OnInit {
               this.router.navigate(['dashboard/static'])
             },
             error => {
+              this.loading=false
               console.log("Post failed with the errors", error.error);
               if (error.error && error.error.success == false) {
                 this.toster.error(error.error.message);
@@ -195,8 +199,10 @@ export class AddStaticPagesComponent implements OnInit {
   }
   edit() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/static_pages/' + this.id + '/edit', { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
         this.title = this.res.title
@@ -205,6 +211,7 @@ export class AddStaticPagesComponent implements OnInit {
         this.newsForm()
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -217,6 +224,7 @@ export class AddStaticPagesComponent implements OnInit {
 
   update() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('title', this.form.value.title)
     formdata.append('content', this.form.value.content)
@@ -229,6 +237,7 @@ export class AddStaticPagesComponent implements OnInit {
     this.http.post<any>(this.baseUrl + 'api/static_pages/' + this.id, formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -243,6 +252,7 @@ export class AddStaticPagesComponent implements OnInit {
 
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

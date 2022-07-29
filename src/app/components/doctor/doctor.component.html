@@ -1,3 +1,4 @@
+<app-loader [loading]="loading"></app-loader>
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-12">
@@ -20,7 +21,7 @@
 
             <ngx-datatable-column name="Name">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                {{row.first_name}}
+                {{row.first_name+' '+row.last_name}}
               </ng-template>
             </ngx-datatable-column>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { LoaderService } from 'src/app/shared/services/loader.service'
 
 @Component({
@@ -9,6 +9,7 @@ import { LoaderService } from 'src/app/shared/services/loader.service'
 export class LoaderComponent implements OnInit {
 
   public show: Boolean = true;
+  @Input() loading:Boolean
 
 
   constructor(private loader: LoaderService) {

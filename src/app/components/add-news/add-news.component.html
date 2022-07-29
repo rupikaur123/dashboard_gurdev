@@ -1,3 +1,4 @@
+<app-loader [loading]="loading"></app-loader>
 <div class="container-fluid">
   <div class="edit-profile">
     <div class="row">
@@ -26,7 +27,7 @@
               <div class="form-group">
                 <label class="form-label">Date</label>
                 <input type="text" placeholder="Please choose the date" class="form-control" bsDatepicker
-                  formControlName="date" [bsValue]="bsValue" [minDate]="minDate"
+                  formControlName="date" [bsValue]="bsValue" [maxDate]="maxDate"
                   [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }">
                 <div *ngIf="submitted && f['date'].errors" class="invalid-feedback">
                   <div *ngIf="f['date'].errors['required']">Please select the date</div>

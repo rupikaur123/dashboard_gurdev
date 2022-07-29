@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./ecommerce.component.scss']
 })
 export class EcommerceComponent implements OnInit {
+  loading:boolean=false
   dashboardList: any
   res: any
   baseUrl: any = 'http://api.gurdevhospital.co/'
@@ -33,8 +34,10 @@ export class EcommerceComponent implements OnInit {
   }
   getDashboardList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading= true
     this.http.get<any>(this.baseUrl + 'api/dashboard?rows=10&page=' + page, { 'headers': headers })
       .subscribe(data => {
+        this.loading= false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
         this.dashboardList = this.res.data
@@ -43,6 +46,7 @@ export class EcommerceComponent implements OnInit {
         console.log('dashboardList', this.dashboardList)
       },
         error => {
+          this.loading= false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);

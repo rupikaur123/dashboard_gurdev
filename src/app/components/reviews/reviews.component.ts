@@ -24,6 +24,7 @@ export class ReviewsComponent implements OnInit {
   form_type: any = ''
   review: any = ''
   image: any = ''
+  loading=false
   baseUrl: any = 'http://api.gurdevhospital.co/'
   url: any = false; //Angular 11, for stricter type
   msg = "";
@@ -146,12 +147,14 @@ export class ReviewsComponent implements OnInit {
     else {
       if (this.form_type != 'edit') {
         const headers = { 'Authorization': 'Bearer ' + this.token }
+        this.loading=true
         let formdata = new FormData()
         formdata.append('review', this.form.value.review)
         formdata.append('image', this.image_upload)
         this.http.post<any>(this.baseUrl + 'api/reviews', formdata, { 'headers': headers })
           .subscribe(
             response => {
+              this.loading=false
               this.data = response
               console.log("Data" + this.data);
               if (this.data.success == true) {
@@ -164,6 +167,7 @@ export class ReviewsComponent implements OnInit {
               this.getReviewsList(this.page.offset + 1)
             },
             error => {
+              this.loading=false
               console.log("Post failed with the errors", error.error);
               if (error.error && error.error.success == false) {
                 this.toster.error(error.error.message);
@@ -184,8 +188,10 @@ export class ReviewsComponent implements OnInit {
   }
   edit() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/reviews/' + this.news_data.id, { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
         this.review = this.res.review
@@ -193,6 +199,7 @@ export class ReviewsComponent implements OnInit {
         this.newsForm()
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -205,6 +212,7 @@ export class ReviewsComponent implements OnInit {
 
   update() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('review', this.form.value.review)
     if (this.image_upload != undefined) {
@@ -214,6 +222,7 @@ export class ReviewsComponent implements OnInit {
     this.http.post<any>(this.baseUrl + 'api/update_review/' + this.news_data.id, formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -228,6 +237,7 @@ export class ReviewsComponent implements OnInit {
 
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);
@@ -242,8 +252,10 @@ export class ReviewsComponent implements OnInit {
   }
   getReviewsList(page: any) {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     this.http.get<any>(this.baseUrl + 'api/reviews?rows=10&page=' + page+ '&search=' + this.search, { 'headers': headers })
       .subscribe(data => {
+        this.loading=false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
         this.newsList = this.res.data
@@ -252,6 +264,7 @@ export class ReviewsComponent implements OnInit {
         console.log('newsList', this.newsList)
       },
         error => {
+          this.loading=false
           console.log("failed with the errors", error.error);
           if (error.error) {
             this.toster.error(error.error.message);
@@ -296,12 +309,14 @@ export class ReviewsComponent implements OnInit {
   changeStatus(item, status) {
     console.log('Item', item)
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('id', item.id)
     formdata.append('status', status)
     this.http.post<any>(this.baseUrl + 'api/review_status', formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -310,6 +325,7 @@ export class ReviewsComponent implements OnInit {
           this.getReviewsList(this.page.offset + 1)
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);
@@ -329,11 +345,13 @@ export class ReviewsComponent implements OnInit {
   }
   delete() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
+    this.loading=true
     let formdata = new FormData()
     formdata.append('id', this.news_data.id)
     this.http.post<any>(this.baseUrl + 'api/delete', formdata, { 'headers': headers })
       .subscribe(
         response => {
+          this.loading=false
           this.data = response
           console.log("Data" + this.data);
           if (this.data.success == true) {
@@ -345,6 +363,7 @@ export class ReviewsComponent implements OnInit {
           this.getReviewsList(this.page.offset + 1)
         },
         error => {
+          this.loading=false
           console.log("Post failed with the errors", error.error);
           if (error.error && error.error.success == false) {
             this.toster.error(error.error.message);

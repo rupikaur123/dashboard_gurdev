@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 export class LoginComponent implements OnInit {
 
   public show: boolean = false;
+  public loading:boolean= false;
   public loginForm: FormGroup;
   public errorMessage: any;
   data: any
@@ -39,12 +40,14 @@ export class LoginComponent implements OnInit {
       return;
     }
     else {
+      this.loading= true
       console.log('Login Values', this.loginForm.value)
       const headers = { 'content-type': 'application/json' }
       const body = JSON.stringify(this.loginForm.value);
       this.http.post<any>(this.baseURL + 'api/login', body, { 'headers': headers })
         .subscribe(
           response => {
+            this.loading= false
             this.data = response
             console.log("Login" + this.data);
             if (this.data.success == true) {
@@ -56,6 +59,7 @@ export class LoginComponent implements OnInit {
 
           },
           error => {
+            this.loading= false
             console.log("Post failed with the errors", error.error);
 
             if (error.error && error.error.success == false) {
