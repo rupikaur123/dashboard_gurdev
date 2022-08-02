@@ -30,10 +30,16 @@ export class AddStaticPagesComponent implements OnInit {
   baseUrl: any = 'http://api.gurdevhospital.co/'
   url: any = false; //Angular 11, for stricter type
   msg = "";
+  meta_description:any=''
+  meta_title:any=''
+  meta_keyword:any=''
   form: FormGroup = new FormGroup({
     title: new FormControl(''),
     content: new FormControl(''),
     image: new FormControl(''),
+    meta_description: new FormControl(''),
+    meta_keyword: new FormControl(''),
+   meta_title:new FormControl('')
   });
   token: any = ''
   submitted = false;
@@ -138,7 +144,25 @@ export class AddStaticPagesComponent implements OnInit {
           [
             Validators.required,
           ]
-        ]
+        ],
+        meta_title: [
+          this.meta_title,
+          [
+            Validators.required
+          ]
+        ],
+        meta_description: [
+          this.meta_description,
+          [
+            Validators.required]
+        ],
+        meta_keyword: [
+          this.meta_keyword,
+          [
+            Validators.required,
+           
+          ]
+        ],
 
       }
     );
@@ -162,6 +186,9 @@ export class AddStaticPagesComponent implements OnInit {
         formdata.append('title', this.form.value.title)
         formdata.append('content', this.form.value.content)
         formdata.append('image', this.image_upload)
+        formdata.append('meta_title', this.form.value.meta_title)
+        formdata.append('meta_description', this.form.value.meta_description)
+        formdata.append('meta_keyword', this.form.value.meta_keyword)
         this.http.post<any>(this.baseUrl + 'api/static_pages', formdata, { 'headers': headers })
           .subscribe(
             response => {
@@ -207,6 +234,9 @@ export class AddStaticPagesComponent implements OnInit {
         this.res = data.data;
         this.title = this.res.title
         this.content = this.res.content
+        this.meta_description = this.res.meta_description
+        this.meta_keyword= this.res.meta_keyword
+        this.meta_title= this.res.meta_title
         console.log('NewsList', this.res)
         this.newsForm()
       },
@@ -228,6 +258,9 @@ export class AddStaticPagesComponent implements OnInit {
     let formdata = new FormData()
     formdata.append('title', this.form.value.title)
     formdata.append('content', this.form.value.content)
+    formdata.append('meta_title', this.form.value.meta_title)
+    formdata.append('meta_description', this.form.value.meta_description)
+    formdata.append('meta_keyword', this.form.value.meta_keyword)
 
     formdata.append('_method', 'PATCH')
     if (this.image_upload != undefined) {

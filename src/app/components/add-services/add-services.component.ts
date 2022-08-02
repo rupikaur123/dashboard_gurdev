@@ -26,12 +26,17 @@ export class AddServicesComponent implements OnInit {
   msg = "";
   user_data: any
   loading=false
+  meta_description:any=''
+  meta_title:any=''
+  meta_keyword:any=''
   form: FormGroup = new FormGroup({
     name: new FormControl(''),
     image: new FormControl(''),
     banner_img: new FormControl(''),
     description: new FormControl(''),
-    alies_name: new FormControl('')
+    meta_description: new FormControl(''),
+    meta_keyword: new FormControl(''),
+   meta_title:new FormControl('')
 
   });
   submitted = false;
@@ -84,24 +89,35 @@ export class AddServicesComponent implements OnInit {
           ]
         ],
         image: [
-          this.image,
-          [
-            Validators.required,
-          ]
-        ],
+          this.image ],
         banner_img: [
-          this.banner_img,
+          this.banner_img
+        ],
+        meta_title: [
+          this.meta_title,
           [
-            Validators.required,
+            Validators.required
           ]
         ],
-        alies_name: [
-          this.alies_name,
+        meta_description: [
+          this.meta_description,
+          [
+            Validators.required]
+        ],
+        meta_keyword: [
+          this.meta_keyword,
           [
             Validators.required,
-            Validators.minLength(4),
+           
           ]
-        ]
+        ],
+        // alies_name: [
+        //   this.alies_name,
+        //   [
+        //     Validators.required,
+        //     Validators.minLength(4),
+        //   ]
+        // ]
       }
     );
   }
@@ -121,7 +137,10 @@ export class AddServicesComponent implements OnInit {
         let formdata = new FormData()
         formdata.append('name', this.form.value.name)
         formdata.append('description', this.form.value.description)
-        formdata.append('alies_name', this.form.value.alies_name)
+        formdata.append('meta_title', this.form.value.meta_title)
+        formdata.append('meta_description', this.form.value.meta_description)
+        formdata.append('meta_keyword', this.form.value.meta_keyword)
+        // formdata.append('alies_name', this.form.value.alies_name)
         formdata.append('image', this.image_upload)
         formdata.append('banner_image', this.bannerimage_upload)
         this.http.post<any>(this.baseUrl + 'api/services', formdata, { 'headers': headers })
@@ -172,6 +191,9 @@ export class AddServicesComponent implements OnInit {
         this.serviceName = this.res.name
         this.description = this.res.description
         this.alies_name = this.res.alies_name
+        this.meta_description = this.res.meta_description
+        this.meta_keyword= this.res.meta_keyword
+        this.meta_title= this.res.meta_title
         // this.image = this.res.image
         console.log('UserList', this.res)
         this.url = false
@@ -226,7 +248,10 @@ export class AddServicesComponent implements OnInit {
     let formdata = new FormData()
     formdata.append('name', this.form.value.name)
     formdata.append('description', this.form.value.description)
-    formdata.append('alies_name', this.form.value.alies_name)
+    // formdata.append('alies_name', this.form.value.alies_name)
+    formdata.append('meta_title', this.form.value.meta_title)
+    formdata.append('meta_description', this.form.value.meta_description)
+    formdata.append('meta_keyword', this.form.value.meta_keyword)
     if (this.image_upload != undefined) {
       formdata.append('image', this.image_upload)
     } if (this.bannerimage_upload != undefined) {

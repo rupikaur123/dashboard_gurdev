@@ -25,7 +25,7 @@
 
                 </div>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label class="form-label">Alies Name</label>
                 <input type="text" formControlName="alies_name" class="form-control"
                   [ngClass]="{ 'is-invalid': submitted && f['alies_name'].errors }" />
@@ -35,6 +35,31 @@
                     Alies Name must be at least 4 characters
                   </div>
                 </div>
+              </div> -->
+              <div class="form-group">
+                <label class="form-label">Meta Title</label>
+                <input type="text" formControlName="meta_title" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['meta_title'].errors }" />
+                <div *ngIf="submitted && f['meta_title'].errors" class="invalid-feedback">
+                  <div *ngIf="f['meta_title'].errors['required']">Meta Title is required</div>
+                 
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Meta Keyword</label>
+                <input type="text" formControlName="meta_keyword" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['meta_keyword'].errors }" />
+                <div *ngIf="submitted && f['meta_keyword'].errors" class="invalid-feedback">
+                  <div *ngIf="f['meta_keyword'].errors['required']">Meta Keyword is required</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Meta Description</label>
+                <input type="text" formControlName="meta_description" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f['meta_description'].errors }" />
+                <div *ngIf="submitted && f['meta_description'].errors" class="invalid-feedback">
+                  <div *ngIf="f['meta_description'].errors['required']">Meta Description is required</div>
+                 </div>
               </div>
               <div class="form-group">
                 <label class="form-label">Description</label>
@@ -57,10 +82,11 @@
               <div class="form-group">
                 <label class="form-label">Image</label>
                 <input type="file" (change)="selectFile($event,'image')" formControlName="image" class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['image'].errors }">
-                <div *ngIf="submitted && form_type != 'edit' && f['image'].errors" class="invalid-feedback">
+                  >
+                  <!-- [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['image'].errors }" -->
+                <!-- <div *ngIf="submitted && form_type != 'edit' && f['image'].errors" class="invalid-feedback">
                   <div *ngIf="f['image'].errors['required']">Plesae choose the image.</div>
-                </div>
+                </div> -->
               </div>
 
               <div *ngIf="form_type=='edit' && res != null && banner_url != true">
@@ -72,11 +98,10 @@
               <div class="form-group">
                 <label class="form-label">Banner Image</label>
                 <input type="file" (change)="selectFile($event,'banner')" formControlName="banner_img"
-                  class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && form_type != 'edit' && f['banner_img'].errors }">
-                <div *ngIf="submitted && form_type != 'edit' && f['banner_img'].errors" class="invalid-feedback">
+                  class="form-control">
+                <!-- <div *ngIf="submitted && form_type != 'edit' && f['banner_img'].errors" class="invalid-feedback">
                   <div *ngIf="f['banner_img'].errors['required']">Plesae choose the banner image.</div>
-                </div>
+                </div> -->
               </div>
 
               <div class="form-footer">
