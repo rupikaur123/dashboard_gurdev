@@ -27,27 +27,17 @@
               <div class="form-group">
                 <label class="form-label">Meta Title</label>
                 <input type="text" formControlName="meta_title" class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f['meta_title'].errors }" />
-                <div *ngIf="submitted && f['meta_title'].errors" class="invalid-feedback">
-                  <div *ngIf="f['meta_title'].errors['required']">Meta Title is required</div>
-                 
+                 />
                 </div>
-              </div>
               <div class="form-group">
                 <label class="form-label">Meta Keyword</label>
                 <input type="text" formControlName="meta_keyword" class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f['meta_keyword'].errors }" />
-                <div *ngIf="submitted && f['meta_keyword'].errors" class="invalid-feedback">
-                  <div *ngIf="f['meta_keyword'].errors['required']">Meta Keyword is required</div>
-                </div>
-              </div>
+                />
+                 </div>
               <div class="form-group">
                 <label class="form-label">Meta Description</label>
                 <input type="text" formControlName="meta_description" class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted && f['meta_description'].errors }" />
-                <div *ngIf="submitted && f['meta_description'].errors" class="invalid-feedback">
-                  <div *ngIf="f['meta_description'].errors['required']">Meta Description is required</div>
-                 </div>
+                 />
               </div>
               
               <div class="form-group">

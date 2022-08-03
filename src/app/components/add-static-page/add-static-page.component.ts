@@ -147,21 +147,13 @@ export class AddStaticPagesComponent implements OnInit {
         ],
         meta_title: [
           this.meta_title,
-          [
-            Validators.required
-          ]
+        
         ],
         meta_description: [
-          this.meta_description,
-          [
-            Validators.required]
+          this.meta_description
         ],
         meta_keyword: [
-          this.meta_keyword,
-          [
-            Validators.required,
-           
-          ]
+          this.meta_keyword
         ],
 
       }

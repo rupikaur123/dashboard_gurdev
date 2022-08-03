@@ -94,22 +94,13 @@ export class AddServicesComponent implements OnInit {
           this.banner_img
         ],
         meta_title: [
-          this.meta_title,
-          [
-            Validators.required
-          ]
+          this.meta_title
         ],
         meta_description: [
-          this.meta_description,
-          [
-            Validators.required]
+          this.meta_description
         ],
         meta_keyword: [
-          this.meta_keyword,
-          [
-            Validators.required,
-           
-          ]
+          this.meta_keyword
         ],
         // alies_name: [
         //   this.alies_name,
@@ -141,8 +132,13 @@ export class AddServicesComponent implements OnInit {
         formdata.append('meta_description', this.form.value.meta_description)
         formdata.append('meta_keyword', this.form.value.meta_keyword)
         // formdata.append('alies_name', this.form.value.alies_name)
-        formdata.append('image', this.image_upload)
+        if(this.image_upload != undefined){
+          formdata.append('image', this.image_upload)
+        }
+       if(this.bannerimage_upload != undefined){
         formdata.append('banner_image', this.bannerimage_upload)
+        
+       }
         this.http.post<any>(this.baseUrl + 'api/services', formdata, { 'headers': headers })
           .subscribe(
             response => {
