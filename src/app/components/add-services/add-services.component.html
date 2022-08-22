@@ -25,6 +25,38 @@
 
                 </div>
               </div>
+              <div class="form-group">
+              <label class="form-label">Choose Doctor</label>
+              <!-- <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-select [formControl]="websiteMultiCtrl" placeholder="" [multiple]="true"  #multiSelect>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="websiteMultiFilterCtrl"></ngx-mat-select-search>
+                      </mat-option>
+                  
+                      <mat-option *ngFor="let website of filteredWebsitesMulti | async" [value]="website">
+                        {{website.first_name+' '+website.last_name}}{{website.profession}}{{website.qualification}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <mat-form-field class="example-full-width" appearance="outline">
+                     <mat-select multiple [formControl]="providers" (openedChange)="onOpenChange(multiUserSearch)">
+                      <mat-select-trigger>
+                        {{providers.value}}
+                      </mat-select-trigger>
+                      <input #multiUserSearch type="text" autocomplete="off" matInput placeholder="Search" (input)="onInputChange($event)"/>
+                  
+                      <mat-option *ngFor="let provider of filteredProviders" [value]="provider">
+                        {{provider.first_name+' '+provider.last_name}}{{provider.profession}}{{provider.qualification}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  </div>
+              
+                <!-- <ul *ngFor="let website of websiteMultiCtrl?.value">
+                  <li>{{website.name}}</li>
+                </ul> -->
+                
+            
               <!-- <div class="form-group">
                 <label class="form-label">Alies Name</label>
                 <input type="text" formControlName="alies_name" class="form-control"

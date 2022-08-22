@@ -39,6 +39,12 @@ import {AddStaticPagesComponent} from '../add-static-page/add-static-page.compon
 import {AddDoctorComponent} from'../add-doctor/add-doctor.component'
 import {DoctorComponent} from '../doctor/doctor.component'
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+
+
 
 @NgModule({
   declarations: [DefaultComponent, EcommerceComponent, ServicesComponent, AppointmentsComponent, AboutComponent, PrivacyComponent, TermsConditionComponent, ContactUsComponent, LatestNewsComponent, ImageGalleryComponent, ReviewsComponent,StaticPagesComponent,AddServicesComponent,AddNewsComponent,AddStaticPagesComponent,AddDoctorComponent,DoctorComponent],
@@ -60,8 +66,11 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     Ng2SearchPipeModule,
     NgxPaginationModule,
     AngularEditorModule,
+    MatSelectModule,
+    MatFormFieldModule,
     HttpClientModule,
     NgxDatatableModule,
+    NgxMatSelectSearchModule,
     BsDatepickerModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: ''
