@@ -54,13 +54,11 @@ export class AddServicesComponent implements OnInit {
   banner_url: any = false
   id: any
   doctorList:any=[]
+  doctor_name:any
   filteredProviders: any[]
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router, private route: ActivatedRoute) {
     this.id = this.route.snapshot.params['id']
     console.log('id', this.id)
-  }
-
-  ngOnInit() {
     this.token = localStorage.getItem('token')
     this.getDoctorList()
     if (this.id != undefined) {
@@ -73,6 +71,21 @@ export class AddServicesComponent implements OnInit {
       this.edit()
     }
     this.userForm()
+  }
+
+  ngOnInit() {
+    // this.token = localStorage.getItem('token')
+    // this.getDoctorList()
+    // if (this.id != undefined) {
+    //   this.form_type = 'edit'
+    // }
+    // if (this.id == undefined) {
+    //   this.form_type = 'create'
+    // }
+    // if (this.form_type == 'edit') {
+    //   this.edit()
+    // }
+    // this.userForm()
   
 
   }
@@ -105,7 +118,7 @@ export class AddServicesComponent implements OnInit {
     console.log('event',event.target.value)
     const searchInput = event.target.value.toLowerCase();
 
-    this.filteredProviders = this.doctorList.filter(({ x }) => {
+    this.filteredProviders = this.doctorList.filter((x ) => {
       console.log('first',x)
       const prov = x.first_name.toLowerCase();
       return prov.includes(searchInput);
@@ -113,7 +126,14 @@ export class AddServicesComponent implements OnInit {
   }
 
   onOpenChange(searchInput: any) {
-    console.log('Check')
+    console.log('Check',this.providers.value)
+    if(this.providers.value != null){
+      this.doctor_name = this.providers.value.map(x=>{
+        return x.first_name+' '+x.last_name
+      })
+      console.log('doctor_name',this.doctor_name)
+    }
+  
     searchInput.value = "";
     this.filteredProviders = this.doctorList;
   }
@@ -181,6 +201,13 @@ export class AddServicesComponent implements OnInit {
         formdata.append('meta_title', this.form.value.meta_title)
         formdata.append('meta_description', this.form.value.meta_description)
         formdata.append('meta_keyword', this.form.value.meta_keyword)
+        if(this.providers?.value.length !=0){
+         let doctor_id = this.providers?.value.map(x=>{
+            return x.id
+          })
+          console.log('doctor_id',doctor_id)
+            formdata.append('doctors', doctor_id.join())
+        }
         // formdata.append('alies_name', this.form.value.alies_name)
         if (this.image_upload != undefined) {
           formdata.append('image', this.image_upload)
@@ -234,15 +261,29 @@ export class AddServicesComponent implements OnInit {
         this.loading = false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data.data;
+        let myArrayFiltered = this.doctorList.filter((el) => {
+          return this.res.doctors.some((f) => {
+            return f.first_name == el.first_name && f.last_name == el.last_name;
+          });
+        });
+        console.log('Arr', myArrayFiltered)
+       this.providers.setValue(myArrayFiltered)
+       if(this.providers.value != null){
+        this.doctor_name = this.providers.value.map(x=>{
+          return x.first_name+' '+x.last_name
+        })
+        console.log('doctor_name',this.doctor_name)
+      }
+        // this.image = this.res.image
+       
+       
         this.serviceName = this.res.name
         this.description = this.res.description
         this.alies_name = this.res.alies_name
         this.meta_description = this.res.meta_description
         this.meta_keyword = this.res.meta_keyword
         this.meta_title = this.res.meta_title
-        // this.image = this.res.image
-        console.log('UserList', this.res)
-        this.url = false
+       this.url = false
         this.userForm()
       },
         error => {
@@ -303,7 +344,13 @@ export class AddServicesComponent implements OnInit {
     } if (this.bannerimage_upload != undefined) {
       formdata.append('banner_image', this.bannerimage_upload)
     }
-
+    if(this.providers?.value.length !=0){
+      let doctor_id = this.providers?.value.map(x=>{
+         return x.id
+       })
+       console.log('doctor_id',doctor_id)
+         formdata.append('doctors', doctor_id.join())
+     }
     formdata.append('_method', 'PATCH')
     this.http.post<any>(this.baseUrl + 'api/services/' + this.id, formdata, { 'headers': headers })
       .subscribe(
