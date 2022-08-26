@@ -98,11 +98,13 @@
               </div>
 
               <div *ngIf="form_type=='edit' && res != null && url != true">
-                <div class="form-group">
-                  <img [src]="res.image" *ngIf="res.image" width="500" height="200">
+              
+                <div class="form-group container" *ngIf="res.image">
+                  <img [src]="res.image"  width="500" height="200">
+                  <i class="fa fa-times" aria-hidden="true" (click)="removeSelectedFile($event,'image')"></i>
                 </div>
               </div>
-
+           
               <div class="form-group">
                 <label class="form-label">Image</label>
                 <input type="file" (change)="selectFile($event,'image')" formControlName="image" class="form-control"
@@ -114,8 +116,9 @@
               </div>
 
               <div *ngIf="form_type=='edit' && res != null && banner_url != true">
-                <div class="form-group">
+                <div class="form-group container" *ngIf="res.banner_image">
                   <img [src]="res.banner_image" *ngIf="res.banner_image" width="800" height="400">
+                  <i class="fa fa-times" aria-hidden="true" (click)="removeSelectedFile($event,'banner')"></i>
                 </div>
               </div>
 

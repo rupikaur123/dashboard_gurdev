@@ -5,3 +5,6 @@
 .example-full-width{
     width: 100%;
 }
+.container { position: relative; }
+.container img { display: block; }
+.container .fa-times { position: absolute; top:0; right:0; cursor : pointer;}

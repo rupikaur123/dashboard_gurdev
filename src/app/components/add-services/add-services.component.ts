@@ -43,7 +43,7 @@ export class AddServicesComponent implements OnInit {
     meta_keyword: new FormControl(''),
     meta_title: new FormControl(''),
   });
-    providers = new FormControl();
+  providers = new FormControl();
   submitted = false;
   form_type: any
   baseUrl: any = 'http://api.gurdevhospital.co/'
@@ -53,8 +53,8 @@ export class AddServicesComponent implements OnInit {
   bannerimage_upload: any
   banner_url: any = false
   id: any
-  doctorList:any=[]
-  doctor_name:any
+  doctorList: any = []
+  doctor_name: any
   filteredProviders: any[]
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder, public http: HttpClient, public toster: ToastrService, private router: Router, private route: ActivatedRoute) {
     this.id = this.route.snapshot.params['id']
@@ -86,7 +86,7 @@ export class AddServicesComponent implements OnInit {
     //   this.edit()
     // }
     // this.userForm()
-  
+
 
   }
 
@@ -115,25 +115,25 @@ export class AddServicesComponent implements OnInit {
       );
   }
   onInputChange(event: any) {
-    console.log('event',event.target.value)
+    console.log('event', event.target.value)
     const searchInput = event.target.value.toLowerCase();
 
-    this.filteredProviders = this.doctorList.filter((x ) => {
-      console.log('first',x)
+    this.filteredProviders = this.doctorList.filter((x) => {
+      console.log('first', x)
       const prov = x.first_name.toLowerCase();
       return prov.includes(searchInput);
     });
   }
 
   onOpenChange(searchInput: any) {
-    console.log('Check',this.providers.value)
-    if(this.providers.value != null){
-      this.doctor_name = this.providers.value.map(x=>{
-        return x.first_name+' '+x.last_name
+    console.log('Check', this.providers.value)
+    if (this.providers.value != null) {
+      this.doctor_name = this.providers.value.map(x => {
+        return x.first_name + ' ' + x.last_name
       })
-      console.log('doctor_name',this.doctor_name)
+      console.log('doctor_name', this.doctor_name)
     }
-  
+
     searchInput.value = "";
     this.filteredProviders = this.doctorList;
   }
@@ -185,6 +185,20 @@ export class AddServicesComponent implements OnInit {
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
   }
+  removeSelectedFile(event, type) {
+    event.preventDefault();
+    if (type == 'image') {
+      this.url = false
+      this.res.image = ''
+      this.image_upload = undefined
+    } 
+    else if (type == 'banner') {
+      this.banner_url = false
+      this.res.banner_image = ''
+      this.bannerimage_upload = undefined
+    }
+
+  }
   onSubmit(): void {
     console.log('Values', this.providers?.value)
     this.submitted = true;
@@ -201,12 +215,12 @@ export class AddServicesComponent implements OnInit {
         formdata.append('meta_title', this.form.value.meta_title)
         formdata.append('meta_description', this.form.value.meta_description)
         formdata.append('meta_keyword', this.form.value.meta_keyword)
-        if(this.providers?.value.length !=0){
-         let doctor_id = this.providers?.value.map(x=>{
+        if (this.providers?.value!=null && this.providers?.value.length != 0) {
+          let doctor_id = this.providers?.value.map(x => {
             return x.id
           })
-          console.log('doctor_id',doctor_id)
-            formdata.append('doctors', doctor_id.join())
+          console.log('doctor_id', doctor_id)
+          formdata.append('doctors', doctor_id.join())
         }
         // formdata.append('alies_name', this.form.value.alies_name)
         if (this.image_upload != undefined) {
@@ -253,6 +267,7 @@ export class AddServicesComponent implements OnInit {
     }
 
   }
+
   edit() {
     const headers = { 'Authorization': 'Bearer ' + this.token }
     this.loading = true
@@ -267,23 +282,23 @@ export class AddServicesComponent implements OnInit {
           });
         });
         console.log('Arr', myArrayFiltered)
-       this.providers.setValue(myArrayFiltered)
-       if(this.providers.value != null){
-        this.doctor_name = this.providers.value.map(x=>{
-          return x.first_name+' '+x.last_name
-        })
-        console.log('doctor_name',this.doctor_name)
-      }
+        this.providers.setValue(myArrayFiltered)
+        if (this.providers.value != null) {
+          this.doctor_name = this.providers.value.map(x => {
+            return x.first_name + ' ' + x.last_name
+          })
+          console.log('doctor_name', this.doctor_name)
+        }
         // this.image = this.res.image
-       
-       
+
+
         this.serviceName = this.res.name
         this.description = this.res.description
         this.alies_name = this.res.alies_name
         this.meta_description = this.res.meta_description
         this.meta_keyword = this.res.meta_keyword
         this.meta_title = this.res.meta_title
-       this.url = false
+        this.url = false
         this.userForm()
       },
         error => {
@@ -344,13 +359,13 @@ export class AddServicesComponent implements OnInit {
     } if (this.bannerimage_upload != undefined) {
       formdata.append('banner_image', this.bannerimage_upload)
     }
-    if(this.providers?.value.length !=0){
-      let doctor_id = this.providers?.value.map(x=>{
-         return x.id
-       })
-       console.log('doctor_id',doctor_id)
-         formdata.append('doctors', doctor_id.join())
-     }
+    if (this.providers?.value!=null && this.providers?.value.length != 0) {
+      let doctor_id = this.providers?.value.map(x => {
+        return x.id
+      })
+      console.log('doctor_id', doctor_id)
+      formdata.append('doctors', doctor_id.join())
+    }
     formdata.append('_method', 'PATCH')
     this.http.post<any>(this.baseUrl + 'api/services/' + this.id, formdata, { 'headers': headers })
       .subscribe(
@@ -418,3 +433,4 @@ export class AddServicesComponent implements OnInit {
   }
 
 }
+
