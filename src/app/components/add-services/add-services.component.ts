@@ -98,7 +98,9 @@ export class AddServicesComponent implements OnInit {
         this.loading = false
         console.log("Get completed sucessfully. The response received " + data);
         this.res = data;
-        this.doctorList = this.res.data
+        this.doctorList = this.res.data.filter(x=>{
+          return x.status == "1"
+        })
 
         console.log('doctorList', this.doctorList)
         this.filteredProviders = this.doctorList;
