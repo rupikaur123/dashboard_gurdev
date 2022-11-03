@@ -37,8 +37,8 @@
                   <input id="checkbox1" type="checkbox">
                   <label class="text-muted" for="checkbox1">Remember password</label>
                 </div> -->
-                <!-- <a [routerLink]="'/authentication/forgot-password'" class="link">Forgot password?</a> -->
-                <!-- <br><br><br> -->
+                <a [routerLink]="'/authentication/forgot-password'" class="link">Forgot password?</a>
+                <br><br><br>
                 <button class="btn btn-primary btn-block" [class.loader--text]="authService.showLoader"
                   [disabled]="!loginForm.valid || authService.showLoader" (click)="login()" type="button"><span>{{
                     authService.showLoader ? '' : 'Login' }}</span>
@@ -50,4 +50,4 @@
       </div>
     </div>
   </div>
-</div>
+</div>  
